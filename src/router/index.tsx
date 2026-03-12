@@ -5,6 +5,7 @@ import { AuthGuard, RoleGuard } from '@/router/guards';
 import { HomePage } from '@/pages/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { UnauthorizedPage } from '@/pages/UnauthorizedPage';
+import { UIShowcasePage } from '@/pages/UIShowcasePage';
 import { LoginPage } from '@/modules/auth/presentation/pages/LoginPage';
 import { CatalogPage } from '@/modules/catalog/presentation/pages/CatalogPage';
 import { ProductDetailPage } from '@/modules/catalog/presentation/pages/ProductDetailPage';
@@ -28,7 +29,8 @@ export const router = createBrowserRouter([
       { path: 'carrito', element: <CartPage /> },
       { path: 'checkout', element: <AuthGuard><CheckoutPage /></AuthGuard> },
       { path: 'mis-pedidos', element: <AuthGuard><MyOrdersPage /></AuthGuard> },
-      { path: 'no-autorizado', element: <UnauthorizedPage /> }
+      { path: 'no-autorizado', element: <UnauthorizedPage /> },
+      { path: 'ui-showcase', element: <UIShowcasePage /> }
     ]
   },
   {
