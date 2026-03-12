@@ -17,11 +17,14 @@ export interface Product {
 export interface Promotion {
   id: string;
   name: string;
+  scope: 'quantity' | 'product' | 'category';
   type: 'percentage' | 'fixed';
   amount: number;
   minQty?: number;
   category?: string;
   productId?: string;
+  startDate: string;
+  endDate: string;
   active: boolean;
 }
 
@@ -54,7 +57,18 @@ export const mockProducts: Product[] = [
 ];
 
 export const mockPromotions: Promotion[] = [
-  { id: 'promo1', name: 'Llevando 3, 10%', type: 'percentage', amount: 10, minQty: 3, category: 'sahumerios', active: true }
+  {
+    id: 'promo1',
+    name: 'Llevando 3, 10%',
+    scope: 'quantity',
+    type: 'percentage',
+    amount: 10,
+    minQty: 3,
+    category: 'sahumerios',
+    startDate: '2026-01-01',
+    endDate: '2026-12-31',
+    active: true
+  }
 ];
 
 export const mockOrders: Order[] = [];

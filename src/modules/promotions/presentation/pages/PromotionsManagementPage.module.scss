@@ -1,0 +1,48 @@
+.container {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.formCard {
+  border: 1px solid #ddd;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: #fff;
+}
+
+.form {
+  display: grid;
+  gap: 0.75rem;
+
+  label {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  input,
+  select {
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    padding: 0.6rem;
+  }
+
+  small {
+    color: #a40000;
+  }
+}
+
+.checkboxRow {
+  display: flex !important;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.active {
+  color: #0a7f2e;
+  font-weight: 600;
+}
+
+.inactive {
+  color: #a40000;
+  font-weight: 600;
+}
