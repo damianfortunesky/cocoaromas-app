@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useCatalog } from '@/modules/catalog/application/useCatalog';
 import { ProductCard } from '@/modules/catalog/presentation/components/ProductCard';
 import { useCart } from '@/modules/cart/application/useCart';
 import { Loader } from '@/shared/ui/Loader/Loader';
 import { EmptyState } from '@/shared/ui/EmptyState/EmptyState';
+import { Alert } from '@/shared/ui/Alert/Alert';
 import styles from './CatalogPage.module.scss';
 
 type PriceFilter = 'all' | 'low' | 'mid' | 'high';
@@ -19,39 +20,45 @@ export function CatalogPage() {
   const [sort, setSort] = useState<'name' | 'price'>('name');
   const [page, setPage] = useState(1);
 
-  const { data, isLoading } = useCatalog({ search, category, sort, page: 1, pageSize: 100 });
+  const backendFilters = useMemo(() => {
+    const priceRange =
+      priceFilter === 'all'
+        ? {}
+        : priceFilter === 'low'
+          ? { maxPrice: 10000 }
+          : priceFilter === 'mid'
+            ? { minPrice: 10000, maxPrice: 20000 }
+            : { minPrice: 20001 };
+
+    const stockFilter =
+      availability === 'all'
+        ? {}
+        : {
+            inStock: availability === 'inStock'
+          };
+
+    return {
+      search,
+      category,
+      sort,
+      page,
+      pageSize: PAGE_SIZE,
+      ...priceRange,
+      ...stockFilter
+    };
+  }, [availability, category, page, priceFilter, search, sort]);
+
+  const { data, isLoading, isError, error } = useCatalog(backendFilters);
   const { addItem } = useCart();
 
-  const filteredItems = useMemo(() => {
-    const baseItems = data?.items ?? [];
+  const products = data?.items ?? [];
+  const totalPages = Math.max(1, Math.ceil((data?.total ?? 0) / (data?.pageSize ?? PAGE_SIZE)));
 
-    return baseItems.filter((product) => {
-      const matchesPrice =
-        priceFilter === 'all'
-          ? true
-          : priceFilter === 'low'
-            ? product.price < 10000
-            : priceFilter === 'mid'
-              ? product.price >= 10000 && product.price <= 20000
-              : product.price > 20000;
-
-      const matchesAvailability =
-        availability === 'all'
-          ? true
-          : availability === 'inStock'
-            ? product.stock > 0
-            : product.stock <= 0;
-
-      return matchesPrice && matchesAvailability;
-    });
-  }, [data?.items, priceFilter, availability]);
-
-  const totalPages = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
-
-  const paginatedItems = useMemo(() => {
-    const start = (page - 1) * PAGE_SIZE;
-    return filteredItems.slice(start, start + PAGE_SIZE);
-  }, [filteredItems, page]);
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
 
   const handleFilterChange = (updater: () => void) => {
     updater();
@@ -127,15 +134,24 @@ export function CatalogPage() {
           </div>
 
           {isLoading && <Loader />}
-          {!isLoading && !filteredItems.length && <EmptyState message="No encontramos productos" />}
 
-          <div className={styles.grid}>
-            {paginatedItems.map((product) => (
-              <ProductCard key={product.id} product={product} onAddToCart={addItem} />
-            ))}
-          </div>
+          {!isLoading && isError && (
+            <Alert variant="danger" title="No pudimos cargar el catálogo">
+              {(error as Error | undefined)?.message ?? 'Intentá nuevamente en unos segundos.'}
+            </Alert>
+          )}
 
-          {!isLoading && filteredItems.length > 0 && (
+          {!isLoading && !isError && !products.length && <EmptyState message="No encontramos productos" />}
+
+          {!isLoading && !isError && (
+            <div className={styles.grid}>
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} onAddToCart={addItem} />
+              ))}
+            </div>
+          )}
+
+          {!isLoading && !isError && products.length > 0 && (
             <div className={styles.pagination}>
               <button type="button" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={page === 1}>
                 Anterior
