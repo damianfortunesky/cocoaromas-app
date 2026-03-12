@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { useCatalog } from '@/modules/catalog/application/useCatalog';
 import { ProductCard } from '@/modules/catalog/presentation/components/ProductCard';
 import { useCart } from '@/modules/cart/application/useCart';
-import { Loader } from '@/shared/ui/Loader/Loader';
 import { EmptyState } from '@/shared/ui/EmptyState/EmptyState';
-import { Alert } from '@/shared/ui/Alert/Alert';
+import { ErrorState } from '@/shared/ui/ErrorState/ErrorState';
+import { LoadingState } from '@/shared/ui/LoadingState/LoadingState';
+import { useToast } from '@/shared/ui/Toast/ToastProvider';
 import styles from './CatalogPage.module.scss';
 
 type PriceFilter = 'all' | 'low' | 'mid' | 'high';
@@ -48,8 +49,9 @@ export function CatalogPage() {
     };
   }, [availability, category, page, priceFilter, search, sort]);
 
-  const { data, isLoading, isError, error } = useCatalog(backendFilters);
+  const { data, isLoading, isError, error, refetch, isFetching } = useCatalog(backendFilters);
   const { addItem } = useCart();
+  const { notify } = useToast();
 
   const products = data?.items ?? [];
   const totalPages = Math.max(1, Math.ceil((data?.total ?? 0) / (data?.pageSize ?? PAGE_SIZE)));
@@ -59,6 +61,15 @@ export function CatalogPage() {
       setPage(totalPages);
     }
   }, [page, totalPages]);
+
+  const resetFilters = () => {
+    setSearch('');
+    setCategory('');
+    setPriceFilter('all');
+    setAvailability('all');
+    setSort('name');
+    setPage(1);
+  };
 
   const handleFilterChange = (updater: () => void) => {
     updater();
@@ -115,7 +126,7 @@ export function CatalogPage() {
           </div>
         </aside>
 
-        <div className={styles.mainContent}>
+        <div className={styles.mainContent} aria-busy={isLoading || isFetching}>
           <div className={styles.topBar}>
             <input
               placeholder="Buscar productos"
@@ -133,25 +144,41 @@ export function CatalogPage() {
             </select>
           </div>
 
-          {isLoading && <Loader />}
+          {isLoading ? <LoadingState message="Cargando productos..." /> : null}
 
-          {!isLoading && isError && (
-            <Alert variant="danger" title="No pudimos cargar el catálogo">
-              {(error as Error | undefined)?.message ?? 'Intentá nuevamente en unos segundos.'}
-            </Alert>
-          )}
+          {!isLoading && isError ? (
+            <ErrorState
+              title="No pudimos cargar el catálogo"
+              message={(error as Error | undefined)?.message ?? 'Intentá nuevamente en unos segundos.'}
+              onRetry={() => void refetch()}
+            />
+          ) : null}
 
-          {!isLoading && !isError && !products.length && <EmptyState message="No encontramos productos" />}
+          {!isLoading && !isError && !products.length ? (
+            <EmptyState
+              title="No encontramos productos"
+              message="Probá ajustando la búsqueda o cambiando los filtros aplicados."
+              actionLabel="Limpiar filtros"
+              onAction={resetFilters}
+            />
+          ) : null}
 
-          {!isLoading && !isError && (
+          {!isLoading && !isError && products.length > 0 ? (
             <div className={styles.grid}>
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} onAddToCart={(product) => addItem({ product })} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onAddToCart={(product) => {
+                    addItem({ product });
+                    notify({ variant: 'success', title: 'Producto agregado', message: `${product.name} se sumó al carrito.` });
+                  }}
+                />
               ))}
             </div>
-          )}
+          ) : null}
 
-          {!isLoading && !isError && products.length > 0 && (
+          {!isLoading && !isError && products.length > 0 ? (
             <div className={styles.pagination}>
               <button type="button" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={page === 1}>
                 Anterior
@@ -167,7 +194,7 @@ export function CatalogPage() {
                 Siguiente
               </button>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </section>

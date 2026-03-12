@@ -6,6 +6,7 @@ import { HomePage } from '@/pages/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { UnauthorizedPage } from '@/pages/UnauthorizedPage';
 import { UIShowcasePage } from '@/pages/UIShowcasePage';
+import { AppErrorPage } from '@/pages/AppErrorPage';
 import { LoginPage } from '@/modules/auth/presentation/pages/LoginPage';
 import { CatalogPage } from '@/modules/catalog/presentation/pages/CatalogPage';
 import { ProductDetailPage } from '@/modules/catalog/presentation/pages/ProductDetailPage';
@@ -21,7 +22,7 @@ import { AdminUsersPage } from '@/modules/admin/presentation/pages/AdminUsersPag
 
 export const router = createBrowserRouter([
   {
-    path: '/', element: <PublicLayout />, children: [
+    path: '/', element: <PublicLayout />, errorElement: <AppErrorPage />, children: [
       { index: true, element: <HomePage /> },
       { path: 'catalogo', element: <CatalogPage /> },
       { path: 'catalogo/:id', element: <ProductDetailPage /> },
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
   {
     path: '/admin',
     element: <ProtectedRoute><RoleGuard allowed={['admin', 'owner', 'employee']}><AdminLayout /></RoleGuard></ProtectedRoute>,
+    errorElement: <AppErrorPage />,
     children: [
       { index: true, element: <AdminDashboardPage /> },
       { path: 'productos', element: <RoleGuard allowed={['admin']}><CreateProductPage /></RoleGuard> },

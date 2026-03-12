@@ -8,6 +8,7 @@ import { setAuthTokenProvider } from '@/shared/api/httpClient';
 import { authStorage } from '@/modules/auth/infrastructure/authStorage';
 import { AuthProvider } from '@/modules/auth/presentation/context/AuthContext';
 import { CartProvider } from '@/modules/cart/presentation/context/CartContext';
+import { ToastProvider } from '@/shared/ui/Toast/ToastProvider';
 import '@/shared/styles/globals.scss';
 
 setAuthTokenProvider(() => authStorage.getToken());
@@ -15,11 +16,13 @@ setAuthTokenProvider(() => authStorage.getToken());
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <CartProvider>
-          <RouterProvider router={router} />
-        </CartProvider>
-      </AuthProvider>
+      <ToastProvider>
+        <AuthProvider>
+          <CartProvider>
+            <RouterProvider router={router} />
+          </CartProvider>
+        </AuthProvider>
+      </ToastProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

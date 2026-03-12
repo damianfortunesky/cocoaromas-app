@@ -6,6 +6,7 @@ import { Button } from '@/shared/ui/Button/Button';
 import { Input } from '@/shared/ui/Input/Input';
 import { useAuth } from '@/modules/auth/application/useAuth';
 import type { HttpError } from '@/shared/api/httpErrors';
+import { useToast } from '@/shared/ui/Toast/ToastProvider';
 import styles from './LoginPage.module.scss';
 
 const schema = z.object({ email: z.string().email(), password: z.string().min(6) });
@@ -15,12 +16,18 @@ export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { loginMutation } = useAuth();
+  const { notify } = useToast();
   const redirectTo = (location.state as { from?: string } | null)?.from ?? '/';
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data: FormData) => {
-    await loginMutation.mutateAsync(data);
-    navigate(redirectTo, { replace: true });
+    try {
+      await loginMutation.mutateAsync(data);
+      notify({ variant: 'success', title: 'Bienvenido de nuevo', message: 'Inicio de sesión exitoso.' });
+      navigate(redirectTo, { replace: true });
+    } catch {
+      notify({ variant: 'error', title: 'No pudimos iniciar sesión', message: 'Revisá tus credenciales e intentá de nuevo.' });
+    }
   };
 
   const loginErrorMessage = (loginMutation.error as HttpError | null)?.message ?? 'Credenciales inválidas';
