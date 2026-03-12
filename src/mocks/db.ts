@@ -7,6 +7,7 @@ export interface Product {
   category: string;
   description: string;
   imageUrl: string;
+  images?: string[];
   active: boolean;
   stock: number;
   attributes: Record<string, string>;

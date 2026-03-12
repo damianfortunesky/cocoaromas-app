@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
     element: <AuthGuard><RoleGuard allowed={['admin', 'owner', 'employee']}><AdminLayout /></RoleGuard></AuthGuard>,
     children: [
       { index: true, element: <AdminDashboardPage /> },
-      { path: 'productos/crear', element: <RoleGuard allowed={['admin']}><CreateProductPage /></RoleGuard> },
+      { path: 'productos', element: <RoleGuard allowed={['admin']}><CreateProductPage /></RoleGuard> },
       { path: 'stock', element: <RoleGuard allowed={['admin', 'owner', 'employee']}><StockManagementPage /></RoleGuard> },
       { path: 'pedidos', element: <RoleGuard allowed={['admin', 'employee']}><AdminOrdersPage /></RoleGuard> },
       { path: 'promociones', element: <RoleGuard allowed={['admin']}><PromotionsManagementPage /></RoleGuard> },
