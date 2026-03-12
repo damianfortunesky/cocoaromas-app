@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useCatalog } from '@/modules/catalog/application/useCatalog';
 import { ProductCard } from '@/modules/catalog/presentation/components/ProductCard';
+import { useCart } from '@/modules/cart/application/useCart';
 import { Loader } from '@/shared/ui/Loader/Loader';
 import { EmptyState } from '@/shared/ui/EmptyState/EmptyState';
 import styles from './CatalogPage.module.scss';
@@ -10,6 +11,7 @@ export function CatalogPage() {
   const [category, setCategory] = useState('');
   const [sort, setSort] = useState<'name' | 'price'>('name');
   const { data, isLoading } = useCatalog({ search, category, sort });
+  const { addItem } = useCart();
 
   return (
     <section>
@@ -21,7 +23,7 @@ export function CatalogPage() {
       </div>
       {isLoading && <Loader />}
       {!isLoading && !data?.items.length && <EmptyState message="No encontramos productos" />}
-      <div className={styles.grid}>{data?.items.map((p) => <ProductCard key={p.id} product={p} />)}</div>
+      <div className={styles.grid}>{data?.items.map((p) => <ProductCard key={p.id} product={p} onAddToCart={addItem} />)}</div>
     </section>
   );
 }

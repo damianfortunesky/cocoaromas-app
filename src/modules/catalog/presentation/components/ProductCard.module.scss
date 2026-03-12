@@ -1,29 +1,98 @@
-.product {
-  display: grid;
-  gap: var(--space-2);
+.card {
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--color-border) 75%, #fff);
+  background: linear-gradient(180deg, #ffffff 0%, #fffcf9 100%);
+  box-shadow: 0 8px 24px rgba(74, 44, 33, 0.08);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
 }
 
-img {
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 30px rgba(74, 44, 33, 0.14);
+}
+
+.product {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+}
+
+.imageWrap {
+  position: relative;
+  padding: var(--space-3);
+  padding-bottom: var(--space-2);
+}
+
+.image {
   width: 100%;
-  height: 180px;
+  height: 200px;
   object-fit: cover;
   border-radius: var(--radius-md);
 }
 
-h3 {
+.imageWrap :global(article) {
+  position: absolute;
+  top: calc(var(--space-3) + 0.5rem);
+  left: calc(var(--space-3) + 0.5rem);
+}
+
+.content {
+  padding: 0 var(--space-3) var(--space-3);
+  display: grid;
+  gap: var(--space-1);
+}
+
+.content h3 {
+  margin: 0;
   font-size: var(--font-size-lg);
-  margin-bottom: var(--space-1);
+  line-height: 1.3;
 }
 
-p {
-  font-size: var(--font-size-sm);
+.content strong {
+  font-size: var(--font-size-lg);
+  color: var(--color-brown-700);
 }
 
-strong {
-  color: var(--color-brown-600);
+.content small {
+  font-weight: 600;
 }
 
-.out {
-  opacity: 0.5;
-  filter: grayscale(0.15);
+.stockOn {
+  color: #2d7a46;
+}
+
+.stockOff {
+  color: #9a4b4b;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+  padding: 0 var(--space-3) var(--space-3);
+}
+
+.detailLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  background: var(--color-surface-soft);
+  font-weight: 600;
+}
+
+.detailLink:hover {
+  background: #fff;
+}
+
+.outOfStock {
+  filter: grayscale(0.35);
+  opacity: 0.82;
 }
