@@ -3,7 +3,7 @@ import styles from './AdminLayout.module.scss';
 
 const adminNavigation = [
   { label: 'Dashboard', to: '/admin' },
-  { label: 'Productos', to: '/admin/productos/crear' },
+  { label: 'Productos', to: '/admin/productos' },
   { label: 'Stock', to: '/admin/stock' },
   { label: 'Pedidos', to: '/admin/pedidos' },
   { label: 'Promociones', to: '/admin/promociones' },
