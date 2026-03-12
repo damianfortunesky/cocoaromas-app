@@ -1,4 +1,5 @@
 import type { Role } from '@/shared/types/common';
+import type { Promotion } from '@/modules/promotions/domain/promotion.types';
 
 export interface Product {
   id: string;
@@ -14,19 +15,6 @@ export interface Product {
   variants?: Array<{ name: string; options: string[] }>;
 }
 
-export interface Promotion {
-  id: string;
-  name: string;
-  scope: 'quantity' | 'product' | 'category';
-  type: 'percentage' | 'fixed';
-  amount: number;
-  minQty?: number;
-  category?: string;
-  productId?: string;
-  startDate: string;
-  endDate: string;
-  active: boolean;
-}
 
 export interface Order {
   id: string;
