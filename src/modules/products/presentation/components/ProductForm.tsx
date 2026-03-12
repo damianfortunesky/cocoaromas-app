@@ -22,9 +22,10 @@ type VariantOptionsFieldsProps = {
   variantIndex: number;
   control: ReturnType<typeof useForm<ProductFormValues>>['control'];
   register: ReturnType<typeof useForm<ProductFormValues>>['register'];
+  isSubmitting: boolean;
 };
 
-function VariantOptionsFields({ variantIndex, control, register }: VariantOptionsFieldsProps) {
+function VariantOptionsFields({ variantIndex, control, register, isSubmitting }: VariantOptionsFieldsProps) {
   const { fields, append, remove } = useFieldArray({
     control,
     name: `variants.${variantIndex}.options`
@@ -35,12 +36,12 @@ function VariantOptionsFields({ variantIndex, control, register }: VariantOption
       {fields.map((field, optionIndex) => (
         <div key={field.id} className={styles.row}>
           <input placeholder="Opción" {...register(`variants.${variantIndex}.options.${optionIndex}.value`)} />
-          <Button type="button" onClick={() => remove(optionIndex)}>
+          <Button type="button" onClick={() => remove(optionIndex)} disabled={isSubmitting}>
             Quitar opción
           </Button>
         </div>
       ))}
-      <Button type="button" onClick={() => append({ value: '' })}>
+      <Button type="button" onClick={() => append({ value: '' })} disabled={isSubmitting}>
         Agregar opción
       </Button>
     </div>
@@ -83,7 +84,7 @@ export function ProductForm({ editingProduct, onCancelEdit, onSubmitForm, isSubm
   return (
     <article className={styles.formCard}>
       <h2>{editingProduct ? 'Editar producto' : 'Crear producto'}</h2>
-      <form onSubmit={onSubmit} className={styles.form}>
+      <form onSubmit={onSubmit} className={styles.form} aria-busy={isSubmitting}>
         <label>
           Nombre
           <input {...register('name')} />
@@ -115,13 +116,13 @@ export function ProductForm({ editingProduct, onCancelEdit, onSubmitForm, isSubm
           {imageFields.map((field, index) => (
             <div key={field.id} className={styles.row}>
               <input placeholder="https://..." {...register(`images.${index}.url`)} />
-              <Button type="button" onClick={() => removeImage(index)}>
+              <Button type="button" onClick={() => removeImage(index)} disabled={isSubmitting}>
                 Quitar
               </Button>
             </div>
           ))}
           {errors.images?.message && <small>{errors.images.message}</small>}
-          <Button type="button" onClick={() => appendImage({ url: '' })}>
+          <Button type="button" onClick={() => appendImage({ url: '' })} disabled={isSubmitting}>
             Agregar imagen
           </Button>
         </div>
@@ -132,12 +133,12 @@ export function ProductForm({ editingProduct, onCancelEdit, onSubmitForm, isSubm
             <div key={field.id} className={styles.row}>
               <input placeholder="Clave" {...register(`attributes.${index}.key`)} />
               <input placeholder="Valor" {...register(`attributes.${index}.value`)} />
-              <Button type="button" onClick={() => removeAttribute(index)}>
+              <Button type="button" onClick={() => removeAttribute(index)} disabled={isSubmitting}>
                 Quitar
               </Button>
             </div>
           ))}
-          <Button type="button" onClick={() => appendAttribute({ key: '', value: '' })}>
+          <Button type="button" onClick={() => appendAttribute({ key: '', value: '' })} disabled={isSubmitting}>
             Agregar atributo
           </Button>
         </div>
@@ -148,14 +149,14 @@ export function ProductForm({ editingProduct, onCancelEdit, onSubmitForm, isSubm
             <div key={field.id} className={styles.variantCard}>
               <div className={styles.row}>
                 <input placeholder="Nombre de variante" {...register(`variants.${index}.name`)} />
-                <Button type="button" onClick={() => removeVariant(index)}>
+                <Button type="button" onClick={() => removeVariant(index)} disabled={isSubmitting}>
                   Quitar variante
                 </Button>
               </div>
-              <VariantOptionsFields variantIndex={index} control={control} register={register} />
+              <VariantOptionsFields variantIndex={index} control={control} register={register} isSubmitting={isSubmitting} />
             </div>
           ))}
-          <Button type="button" onClick={() => appendVariant({ name: '', options: [{ value: '' }] })}>
+          <Button type="button" onClick={() => appendVariant({ name: '', options: [{ value: '' }] })} disabled={isSubmitting}>
             Agregar variante
           </Button>
         </div>

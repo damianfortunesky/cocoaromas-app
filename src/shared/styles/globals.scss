@@ -105,6 +105,11 @@ button:hover,
   transform: translateY(-1px);
 }
 
+button:disabled:hover,
+.button-base:disabled:hover {
+  transform: none;
+}
+
 input,
 select,
 textarea,

@@ -4,21 +4,24 @@ import { useProductDetail, useRelatedProducts } from '@/modules/catalog/applicat
 import { Button } from '@/shared/ui/Button/Button';
 import { useCart } from '@/modules/cart/application/useCart';
 import { ProductCard } from '@/modules/catalog/presentation/components/ProductCard';
-import { Loader } from '@/shared/ui/Loader/Loader';
-import { Alert } from '@/shared/ui/Alert/Alert';
 import { EmptyState } from '@/shared/ui/EmptyState/EmptyState';
+import { Alert } from '@/shared/ui/Alert/Alert';
+import { ErrorState } from '@/shared/ui/ErrorState/ErrorState';
+import { LoadingState } from '@/shared/ui/LoadingState/LoadingState';
+import { useToast } from '@/shared/ui/Toast/ToastProvider';
 import type { HttpError } from '@/shared/api/httpErrors';
 import styles from './ProductDetailPage.module.scss';
 
 export function ProductDetailPage() {
   const { id = '' } = useParams();
-  const { data, isLoading, isError, error } = useProductDetail(id);
+  const { data, isLoading, isError, error, refetch } = useProductDetail(id);
   const {
     data: relatedProducts = [],
     isLoading: isRelatedLoading,
     isError: isRelatedError
   } = useRelatedProducts(data, 4);
   const { addItem } = useCart();
+  const { notify } = useToast();
   const [selectedVariant, setSelectedVariant] = useState<Record<string, string>>({});
 
   const normalizedAttributes = useMemo(() => {
@@ -28,12 +31,7 @@ export function ProductDetailPage() {
   }, [data?.attributes]);
 
   if (isLoading) {
-    return (
-      <section className={styles.feedbackState}>
-        <Loader />
-        <p>Cargando detalle del producto...</p>
-      </section>
-    );
+    return <LoadingState message="Cargando detalle del producto..." />;
   }
 
   if (isError) {
@@ -41,9 +39,11 @@ export function ProductDetailPage() {
 
     return (
       <section className={styles.feedbackState}>
-        <Alert variant="danger" title="No pudimos cargar el producto">
-          {requestError?.message ?? 'Intentalo de nuevo en unos minutos.'}
-        </Alert>
+        <ErrorState
+          title="No pudimos cargar el producto"
+          message={requestError?.message ?? 'Intentalo de nuevo en unos minutos.'}
+          onRetry={() => void refetch()}
+        />
         <Link to="/catalogo">Volver al catálogo</Link>
       </section>
     );
@@ -84,7 +84,7 @@ export function ProductDetailPage() {
               ))}
             </dl>
           ) : (
-            <EmptyState message="Este producto no tiene atributos adicionales." />
+            <EmptyState title="Sin atributos adicionales" message="Este producto no tiene especificaciones extra por ahora." />
           )}
 
           {data.variants?.length ? (
@@ -112,7 +112,14 @@ export function ProductDetailPage() {
             {isOutOfStock ? 'Sin stock disponible' : `Stock disponible: ${data.stock} unidades`}
           </p>
 
-          <Button type="button" onClick={() => addItem({ product: data, selectedOptions: selectedVariant })} disabled={isOutOfStock}>
+          <Button
+            type="button"
+            onClick={() => {
+              addItem({ product: data, selectedOptions: selectedVariant });
+              notify({ variant: 'success', title: 'Agregado al carrito', message: `${data.name} fue agregado correctamente.` });
+            }}
+            disabled={isOutOfStock}
+          >
             Agregar al carrito
           </Button>
         </div>
@@ -129,12 +136,7 @@ export function ProductDetailPage() {
           <Link to="/catalogo">Ver todo</Link>
         </div>
 
-        {isRelatedLoading ? (
-          <div className={styles.relatedFeedback}>
-            <Loader />
-            <p>Cargando productos relacionados...</p>
-          </div>
-        ) : null}
+        {isRelatedLoading ? <LoadingState message="Cargando productos relacionados..." fullWidth={false} /> : null}
 
         {isRelatedError ? (
           <Alert variant="warning" title="No pudimos cargar relacionados">
@@ -142,15 +144,24 @@ export function ProductDetailPage() {
           </Alert>
         ) : null}
 
-        {!isRelatedLoading && !relatedProducts.length ? (
+        {!isRelatedLoading && !isRelatedError && !relatedProducts.length ? (
           <EmptyState message="No hay productos relacionados para mostrar por ahora." />
-        ) : (
+        ) : null}
+
+        {!isRelatedLoading && relatedProducts.length > 0 ? (
           <div className={styles.relatedGrid}>
             {relatedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} onAddToCart={(product) => addItem({ product })} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                onAddToCart={(product) => {
+                  addItem({ product });
+                  notify({ variant: 'success', title: 'Producto agregado', message: `${product.name} se sumó al carrito.` });
+                }}
+              />
             ))}
           </div>
-        )}
+        ) : null}
       </section>
     </div>
   );

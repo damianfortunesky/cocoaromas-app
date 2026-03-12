@@ -1,0 +1,14 @@
+.loadingState {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: center;
+  text-align: center;
+  padding: var(--space-4);
+  color: var(--color-text-muted);
+}
+
+.fullWidth {
+  width: 100%;
+  min-height: 180px;
+  align-content: center;
+}

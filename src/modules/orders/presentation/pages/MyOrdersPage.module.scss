@@ -1,0 +1,14 @@
+.page {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.orders {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.order {
+  display: grid;
+  gap: 0.4rem;
+}

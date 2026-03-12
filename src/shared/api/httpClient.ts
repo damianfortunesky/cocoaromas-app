@@ -9,10 +9,17 @@ import { toHttpError } from '@/shared/api/httpErrors';
 
 export type AuthTokenProvider = () => string | null;
 
+type UnauthorizedHandler = () => void;
+
 let authTokenProvider: AuthTokenProvider | null = null;
+let unauthorizedHandler: UnauthorizedHandler | null = null;
 
 export const setAuthTokenProvider = (provider: AuthTokenProvider) => {
   authTokenProvider = provider;
+};
+
+export const setUnauthorizedHandler = (handler: UnauthorizedHandler | null) => {
+  unauthorizedHandler = handler;
 };
 
 export const httpClient: AxiosInstance = axios.create({
@@ -32,7 +39,13 @@ const onRequest = (config: InternalAxiosRequestConfig) => {
   return config;
 };
 
-const onResponseError = (error: AxiosError) => Promise.reject(toHttpError(error));
+const onResponseError = (error: AxiosError) => {
+  if (error.response?.status === 401) {
+    unauthorizedHandler?.();
+  }
+
+  return Promise.reject(toHttpError(error));
+};
 
 httpClient.interceptors.request.use(onRequest);
 httpClient.interceptors.response.use((response: AxiosResponse) => response, onResponseError);

@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
 import { authStorage } from '@/modules/auth/infrastructure/authStorage';
+import { setUnauthorizedHandler } from '@/shared/api/httpClient';
+import { dispatchToast } from '@/shared/ui/Toast/ToastProvider';
 import type { Role, UserSession } from '@/shared/types/common';
 
 type AuthContextValue = {
@@ -32,6 +34,25 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   const logout = useCallback(() => {
     setSession(null);
+  }, [setSession]);
+
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      if (!authStorage.get()) return;
+
+      setSession(null);
+      dispatchToast({
+        variant: 'error',
+        title: 'Sesión expirada',
+        message: 'Por seguridad, iniciá sesión nuevamente para continuar.'
+      });
+
+      if (window.location.pathname !== '/login') {
+        window.location.assign('/login');
+      }
+    });
+
+    return () => setUnauthorizedHandler(null);
   }, [setSession]);
 
   const hasRole = useCallback((allowed: Role[]) => {
