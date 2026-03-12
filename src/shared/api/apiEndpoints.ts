@@ -5,7 +5,10 @@ export const API_ENDPOINTS = {
   },
   orders: {
     create: '/orders',
-    myOrders: '/orders/me'
+    myOrders: '/orders/me',
+    adminList: '/admin/orders',
+    adminById: (id: string) => `/admin/orders/${id}`,
+    adminUpdateStatus: (id: string) => `/admin/orders/${id}/status`
   },
   products: '/admin/products',
   productById: (id: string) => `/admin/products/${id}`,
