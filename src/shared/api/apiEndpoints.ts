@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
     myOrders: '/orders/me'
   },
   products: '/admin/products',
+  productById: (id: string) => `/admin/products/${id}`,
   catalog: {
     products: '/catalog/products',
     productById: (id: string) => `/catalog/products/${id}`,
