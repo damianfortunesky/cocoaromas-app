@@ -48,6 +48,7 @@ export function Navbar({ onLogout }: NavbarProps) {
           <li><NavLink to="/" onClick={closeMenu}>Home</NavLink></li>
           <li><NavLink to="/catalogo" onClick={closeMenu}>Catálogo</NavLink></li>
           <li><NavLink to="/carrito" onClick={closeMenu}>Carrito</NavLink></li>
+          <li><NavLink to="/ui-showcase" onClick={closeMenu}>UI Showcase</NavLink></li>
           <li><NavLink to={session ? '/mis-pedidos' : '/login'} onClick={closeMenu}>{accountLabel}</NavLink></li>
         </ul>
 

@@ -1,0 +1,20 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(30 20 25 / 45%);
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  z-index: 20;
+}
+
+.modal {
+  width: min(100%, 460px);
+  border-radius: var(--radius-lg);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-3);
+}

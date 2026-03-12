@@ -1,0 +1,41 @@
+.alert {
+  border-radius: var(--radius-md);
+  border: 1px solid;
+  padding: var(--space-3);
+  display: grid;
+  gap: var(--space-1);
+}
+
+.alert strong {
+  font-size: var(--font-size-sm);
+}
+
+.alert p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: inherit;
+}
+
+.info {
+  background: #edf6ff;
+  border-color: #b9d7f3;
+  color: #1f4f82;
+}
+
+.success {
+  background: #ecfdf4;
+  border-color: #b7e6cd;
+  color: #0e6245;
+}
+
+.warning {
+  background: #fff8e6;
+  border-color: #f3dca2;
+  color: #7a4f00;
+}
+
+.danger {
+  background: #fff0f0;
+  border-color: #f0b9b9;
+  color: #8f1d1d;
+}
