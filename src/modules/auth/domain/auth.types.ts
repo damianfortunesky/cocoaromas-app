@@ -5,6 +5,16 @@ export interface LoginInput {
   password: string;
 }
 
+export interface LoginResponse {
+  accessToken: string;
+  refreshToken?: string | null;
+  user: {
+    id: string;
+    email: string;
+    role: Role;
+  };
+}
+
 export interface AuthRepository {
   login(input: LoginInput): Promise<UserSession>;
   logout(): Promise<void>;

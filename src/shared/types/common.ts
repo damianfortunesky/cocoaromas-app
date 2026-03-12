@@ -5,6 +5,7 @@ export interface UserSession {
   email: string;
   role: Role;
   token: string;
+  refreshToken?: string | null;
 }
 
 export interface PaginatedResult<T> {
