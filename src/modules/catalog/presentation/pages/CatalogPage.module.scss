@@ -1,12 +1,132 @@
-.filters {
+.catalogPage {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: var(--space-4);
+}
+
+.catalogPage h1 {
+  margin: 0;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.sidebar {
+  position: sticky;
+  top: calc(var(--space-4) + 64px);
+  background: linear-gradient(180deg, #fff 0%, #fff9f2 100%);
+  border: 1px solid color-mix(in srgb, var(--color-border) 80%, #fff);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 20px rgba(74, 44, 33, 0.06);
+  padding: var(--space-4);
+  display: grid;
   gap: var(--space-3);
-  margin-bottom: var(--space-5);
+}
+
+.sidebar h2 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+}
+
+.filterGroup {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.filterGroup label {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.filterGroup select,
+.topBar select,
+.topBar input {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  background: #fff;
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+}
+
+.filterGroup select:focus,
+.topBar select:focus,
+.topBar input:focus {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 35%, #fff);
+  outline-offset: 1px;
+}
+
+.mainContent {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.topBar {
+  display: grid;
+  grid-template-columns: 1fr minmax(180px, 220px);
+  gap: var(--space-3);
+  background: #fff;
+  padding: var(--space-3);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--color-border) 80%, #fff);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-4);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+}
+
+.pagination button {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  background: #fff;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: 220px 1fr;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .topBar {
+    grid-template-columns: 1fr;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
