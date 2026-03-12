@@ -1,5 +1,6 @@
 import { mockOrders } from '@/mocks/db';
 import type { CheckoutPayload, Order, OrderStatus } from '@/modules/orders/domain/order.types';
+import type { AdminOrdersFilters } from '@/modules/orders/infrastructure/ordersApiRepository';
 
 export const mockOrdersRepository = {
   async create(payload: CheckoutPayload): Promise<Order> {
@@ -28,10 +29,23 @@ export const mockOrdersRepository = {
   async listByUser(userId: string) {
     return mockOrders.filter((o) => o.userId === userId);
   },
-  async listAll() {
-    return mockOrders;
+  async listAdmin(filters: AdminOrdersFilters = {}) {
+    const normalizedSearch = filters.search?.trim().toLowerCase();
+
+    return mockOrders.filter((order) => {
+      const statusMatches = filters.status ? order.status === filters.status : true;
+      const searchMatches = normalizedSearch
+        ? order.id.toLowerCase().includes(normalizedSearch)
+          || order.buyerName.toLowerCase().includes(normalizedSearch)
+        : true;
+
+      return statusMatches && searchMatches;
+    });
   },
-  async updateStatus(id: string, status: OrderStatus) {
+  async getAdminById(id: string) {
+    return mockOrders.find((o) => o.id === id);
+  },
+  async updateAdminStatus(id: string, status: OrderStatus) {
     const order = mockOrders.find((o) => o.id === id);
     if (order) order.status = status;
     return order;

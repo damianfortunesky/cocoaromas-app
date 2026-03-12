@@ -1,0 +1,63 @@
+.container {
+  display: grid;
+  gap: 1rem;
+}
+
+.header {
+  display: grid;
+  gap: .4rem;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  align-items: end;
+}
+
+.field {
+  display: grid;
+  gap: .35rem;
+}
+
+.select {
+  min-width: 180px;
+  padding: .55rem .7rem;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.statusBadge {
+  text-transform: capitalize;
+}
+
+.statusEditor {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: .5rem;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: .75rem;
+}
+
+.items {
+  padding-left: 1rem;
+}
+
+.small {
+  margin: 0;
+  color: #555;
+  font-size: .85rem;
+}
