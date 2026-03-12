@@ -32,9 +32,26 @@ export interface Order {
   id: string;
   userId: string;
   status: 'pendiente' | 'esperando_pago' | 'pagado' | 'preparando' | 'enviado' | 'entregado' | 'cancelado';
+  subtotal: number;
+  discount: number;
   total: number;
   paymentMethod: 'transfer' | 'mercado_pago';
+  shippingAddress: string;
+  contactPhone: string;
+  buyerName: string;
+  notes?: string;
+  paymentGateway: 'manual_transfer' | 'mercado_pago';
+  paymentReference?: string;
   createdAt: string;
+  items: Array<{
+    productId: string;
+    productName: string;
+    unitPrice: number;
+    quantity: number;
+    lineSubtotal: number;
+    lineDiscount: number;
+    lineTotal: number;
+  }>;
 }
 
 export const mockUsers: Array<{ id: string; email: string; password: string; role: Role }> = [

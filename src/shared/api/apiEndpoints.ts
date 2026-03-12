@@ -3,6 +3,10 @@ export const API_ENDPOINTS = {
     login: '/auth/login',
     refresh: '/auth/refresh'
   },
+  orders: {
+    create: '/orders',
+    myOrders: '/orders/me'
+  },
   products: '/admin/products',
   catalog: {
     products: '/catalog/products',
