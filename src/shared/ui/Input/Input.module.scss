@@ -1,3 +1,24 @@
-.field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.75rem}
-input{padding:.65rem .75rem;border:1px solid var(--color-border);border-radius:var(--radius-md)}
-small{color:var(--color-danger)}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+span {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+input {
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+small {
+  color: var(--color-danger);
+  font-size: var(--font-size-xs);
+}
