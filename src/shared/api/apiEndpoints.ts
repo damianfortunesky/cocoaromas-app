@@ -16,6 +16,9 @@ export const API_ENDPOINTS = {
     list: '/admin/products/stock',
     byProductId: (id: string) => `/admin/products/${id}/stock`
   },
+  promotions: '/admin/promotions',
+  promotionById: (id: string) => `/admin/promotions/${id}`,
+  promotionToggle: (id: string) => `/admin/promotions/${id}/active`,
   catalog: {
     products: '/catalog/products',
     productById: (id: string) => `/catalog/products/${id}`,

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useReducer, type ReactNode } from 'react';
-import { mockPromotions } from '@/mocks/db';
+import { usePromotions } from '@/modules/promotions/application/usePromotions';
 import type { AddToCartPayload, CartItem, CartState, CartSummary } from '@/modules/cart/domain/cart.types';
 import {
   CART_STORAGE_KEY,
@@ -95,7 +95,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener('storage', onStorage);
   }, []);
 
-  const summary = useMemo(() => computeSummary(state.items, mockPromotions), [state.items]);
+  const { data: promotions = [] } = usePromotions();
+  const summary = useMemo(() => computeSummary(state.items, promotions), [state.items, promotions]);
   const itemsCount = useMemo(() => state.items.reduce((acc, item) => acc + item.quantity, 0), [state.items]);
 
   const value = useMemo<CartContextValue>(

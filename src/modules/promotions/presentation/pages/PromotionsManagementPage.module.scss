@@ -3,6 +3,12 @@
   gap: 1.5rem;
 }
 
+.loaderWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .formCard {
   border: 1px solid #ddd;
   border-radius: 0.75rem;
@@ -31,9 +37,21 @@
   }
 }
 
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
 .checkboxRow {
   display: flex !important;
   align-items: center;
+  gap: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 

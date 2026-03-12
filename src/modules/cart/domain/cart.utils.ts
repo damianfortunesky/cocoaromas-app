@@ -1,4 +1,6 @@
-import type { Promotion, Product } from '@/mocks/db';
+import type { Product } from '@/mocks/db';
+import { promotionsEngine } from '@/modules/promotions/domain/promotionEngine';
+import type { Promotion } from '@/modules/promotions/domain/promotion.types';
 import type {
   AddToCartPayload,
   CartItem,
@@ -60,44 +62,8 @@ export function buildCartItem(payload: AddToCartPayload): CartItem | null {
   };
 }
 
-function isPromotionActive(promotion: Promotion): boolean {
-  if (!promotion.active) return false;
-
-  const now = Date.now();
-  const start = new Date(promotion.startDate).getTime();
-  const end = new Date(promotion.endDate).getTime();
-
-  if (Number.isNaN(start) || Number.isNaN(end)) return true;
-  return start <= now && now <= end;
-}
-
-function computePromotionForItem(item: CartItem, promotion: Promotion): number {
-  const baseAmount = item.product.price * item.quantity;
-
-  const appliesByScope =
-    (promotion.scope === 'quantity' && (!promotion.minQty || item.quantity >= promotion.minQty)) ||
-    (promotion.scope === 'category' && promotion.category === item.product.category) ||
-    (promotion.scope === 'product' && promotion.productId === item.product.id);
-
-  if (!appliesByScope) return 0;
-
-  if (promotion.type === 'percentage') {
-    return baseAmount * (promotion.amount / 100);
-  }
-
-  return Math.min(baseAmount, promotion.amount);
-}
-
 export function computeDiscount({ items, promotions }: DiscountComputationInput): number {
-  return items.reduce((totalDiscount, item) => {
-    const activePromotions = promotions.filter((promotion) => isPromotionActive(promotion));
-    const bestDiscountForItem = activePromotions.reduce((best, promotion) => {
-      const discount = computePromotionForItem(item, promotion);
-      return Math.max(best, discount);
-    }, 0);
-
-    return totalDiscount + bestDiscountForItem;
-  }, 0);
+  return promotionsEngine.computeDiscount({ items, promotions });
 }
 
 export function computeSummary(items: CartItem[], promotions: Promotion[]): CartSummary {
