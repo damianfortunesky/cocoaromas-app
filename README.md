@@ -39,6 +39,17 @@ src/
 - Base preparada para promociones desde backend.
 - Flujo transferencia bancaria y placeholder de Mercado Pago sin integración final.
 
+
+## Configuración API HTTP base
+- `src/shared/api/httpClient.ts`: instancia Axios reusable con `baseURL`, headers por defecto y manejo centralizado de errores.
+- `src/shared/api/httpErrors.ts`: normalización de errores HTTP para que la UI reciba un formato consistente.
+- `src/shared/api/apiEndpoints.ts`: catálogo centralizado de rutas para evitar URLs hardcodeadas en componentes.
+- `src/modules/products/infrastructure/productsApiRepository.ts`: ejemplo tipado de consumo `GET` y `POST` usando la capa base.
+
+Variables de entorno:
+- `VITE_API_URL`: URL base de la API Java REST.
+- `VITE_USE_MOCK_API`: `true` para mock local, `false` para repositorios HTTP.
+
 ## Integración backend Java (puntos claros)
 Actualmente se usan repositorios mock (`src/modules/**/infrastructure/mock*Repository.ts`).
 Para conectar API REST:
