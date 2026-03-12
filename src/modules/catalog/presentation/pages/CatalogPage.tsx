@@ -146,7 +146,7 @@ export function CatalogPage() {
           {!isLoading && !isError && (
             <div className={styles.grid}>
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} onAddToCart={addItem} />
+                <ProductCard key={product.id} product={product} onAddToCart={(product) => addItem({ product })} />
               ))}
             </div>
           )}

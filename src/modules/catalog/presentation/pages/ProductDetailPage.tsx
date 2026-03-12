@@ -112,7 +112,7 @@ export function ProductDetailPage() {
             {isOutOfStock ? 'Sin stock disponible' : `Stock disponible: ${data.stock} unidades`}
           </p>
 
-          <Button type="button" onClick={() => addItem(data)} disabled={isOutOfStock}>
+          <Button type="button" onClick={() => addItem({ product: data, selectedOptions: selectedVariant })} disabled={isOutOfStock}>
             Agregar al carrito
           </Button>
         </div>
@@ -147,7 +147,7 @@ export function ProductDetailPage() {
         ) : (
           <div className={styles.relatedGrid}>
             {relatedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} onAddToCart={addItem} />
+              <ProductCard key={product.id} product={product} onAddToCart={(product) => addItem({ product })} />
             ))}
           </div>
         )}
