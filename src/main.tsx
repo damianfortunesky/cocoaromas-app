@@ -6,6 +6,7 @@ import { queryClient } from '@/app/queryClient';
 import { router } from '@/router';
 import { setAuthTokenProvider } from '@/shared/api/httpClient';
 import { authStorage } from '@/modules/auth/infrastructure/authStorage';
+import { AuthProvider } from '@/modules/auth/presentation/context/AuthContext';
 import '@/shared/styles/globals.scss';
 
 setAuthTokenProvider(() => authStorage.getToken());
@@ -13,7 +14,9 @@ setAuthTokenProvider(() => authStorage.getToken());
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

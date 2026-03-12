@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { PublicLayout } from '@/layouts/PublicLayout';
 import { AdminLayout } from '@/layouts/AdminLayout';
-import { AuthGuard, RoleGuard } from '@/router/guards';
+import { ProtectedRoute, RoleGuard } from '@/router/guards';
 import { HomePage } from '@/pages/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { UnauthorizedPage } from '@/pages/UnauthorizedPage';
@@ -27,15 +27,15 @@ export const router = createBrowserRouter([
       { path: 'catalogo/:id', element: <ProductDetailPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'carrito', element: <CartPage /> },
-      { path: 'checkout', element: <AuthGuard><CheckoutPage /></AuthGuard> },
-      { path: 'mis-pedidos', element: <AuthGuard><MyOrdersPage /></AuthGuard> },
+      { path: 'checkout', element: <ProtectedRoute><CheckoutPage /></ProtectedRoute> },
+      { path: 'mis-pedidos', element: <ProtectedRoute><MyOrdersPage /></ProtectedRoute> },
       { path: 'no-autorizado', element: <UnauthorizedPage /> },
       { path: 'ui-showcase', element: <UIShowcasePage /> }
     ]
   },
   {
     path: '/admin',
-    element: <AuthGuard><RoleGuard allowed={['admin', 'owner', 'employee']}><AdminLayout /></RoleGuard></AuthGuard>,
+    element: <ProtectedRoute><RoleGuard allowed={['admin', 'owner', 'employee']}><AdminLayout /></RoleGuard></ProtectedRoute>,
     children: [
       { index: true, element: <AdminDashboardPage /> },
       { path: 'productos', element: <RoleGuard allowed={['admin']}><CreateProductPage /></RoleGuard> },
