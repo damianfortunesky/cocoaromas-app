@@ -1,6 +1,13 @@
 import { mockProducts } from '@/mocks/db';
 import type { CatalogRepository } from '@/modules/catalog/domain/catalog.types';
 
+const normalize = (value: string) =>
+  value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+
 export const mockCatalogRepository: CatalogRepository = {
   async list(filters) {
     const page = filters.page ?? 1;
@@ -23,5 +30,13 @@ export const mockCatalogRepository: CatalogRepository = {
       pageSize
     };
   },
-  async getById(id) { return mockProducts.find((p) => p.id === id); }
+  async getByIdOrSlug(identifier) {
+    const normalizedIdentifier = normalize(identifier);
+    return mockProducts.find((p) => normalize(p.id) === normalizedIdentifier || normalize(p.name).replace(/\s+/g, '-') === normalizedIdentifier);
+  },
+  async getRelatedProducts(product, limit = 4) {
+    return mockProducts
+      .filter((candidate) => candidate.active && candidate.category === product.category && candidate.id !== product.id)
+      .slice(0, limit);
+  }
 };
