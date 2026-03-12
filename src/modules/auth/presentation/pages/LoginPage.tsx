@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/shared/ui/Button/Button';
 import { Input } from '@/shared/ui/Input/Input';
 import { useAuth } from '@/modules/auth/application/useAuth';
@@ -13,12 +13,14 @@ type FormData = z.infer<typeof schema>;
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { loginMutation } = useAuth();
+  const redirectTo = (location.state as { from?: string } | null)?.from ?? '/';
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data: FormData) => {
     await loginMutation.mutateAsync(data);
-    navigate('/');
+    navigate(redirectTo, { replace: true });
   };
 
   const loginErrorMessage = (loginMutation.error as HttpError | null)?.message ?? 'Credenciales inválidas';

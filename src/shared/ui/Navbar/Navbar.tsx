@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/modules/auth/application/useAuth';
 import { useCart } from '@/modules/cart/application/useCart';
 import styles from './Navbar.module.scss';
@@ -10,16 +10,22 @@ type NavbarProps = {
 
 export function Navbar({ onLogout }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { session, logoutMutation } = useAuth();
+  const navigate = useNavigate();
+  const { session, logoutMutation, isSessionLoading } = useAuth();
   const { items } = useCart();
 
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
   const accountLabel = session ? 'Cuenta' : 'Login';
 
-  const handleLogout = () => {
-    if (onLogout) onLogout();
-    else logoutMutation.mutate();
+  const handleLogout = async () => {
+    if (onLogout) {
+      onLogout();
+      return;
+    }
+
+    await logoutMutation.mutateAsync();
+    navigate('/login', { replace: true });
   };
 
   const closeMenu = () => setIsMenuOpen(false);
@@ -63,7 +69,7 @@ export function Navbar({ onLogout }: NavbarProps) {
               <Link to="/mis-pedidos" className={styles.accountButton} onClick={closeMenu}>
                 👤 Cuenta
               </Link>
-              <button type="button" className={styles.logoutButton} onClick={handleLogout}>
+              <button type="button" className={styles.logoutButton} onClick={handleLogout} disabled={isSessionLoading || logoutMutation.isPending}>
                 Salir
               </button>
             </>
