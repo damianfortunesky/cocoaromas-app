@@ -16,6 +16,7 @@ import { CreateProductPage } from '@/modules/products/presentation/pages/CreateP
 import { StockManagementPage } from '@/modules/stock/presentation/pages/StockManagementPage';
 import { PromotionsManagementPage } from '@/modules/promotions/presentation/pages/PromotionsManagementPage';
 import { AdminOrdersPage } from '@/modules/admin/presentation/pages/AdminOrdersPage';
+import { AdminUsersPage } from '@/modules/admin/presentation/pages/AdminUsersPage';
 
 export const router = createBrowserRouter([
   {
@@ -38,7 +39,8 @@ export const router = createBrowserRouter([
       { path: 'productos/crear', element: <RoleGuard allowed={['admin']}><CreateProductPage /></RoleGuard> },
       { path: 'stock', element: <RoleGuard allowed={['admin', 'owner', 'employee']}><StockManagementPage /></RoleGuard> },
       { path: 'pedidos', element: <RoleGuard allowed={['admin', 'employee']}><AdminOrdersPage /></RoleGuard> },
-      { path: 'promociones', element: <RoleGuard allowed={['admin']}><PromotionsManagementPage /></RoleGuard> }
+      { path: 'promociones', element: <RoleGuard allowed={['admin']}><PromotionsManagementPage /></RoleGuard> },
+      { path: 'usuarios', element: <RoleGuard allowed={['admin']}><AdminUsersPage /></RoleGuard> }
     ]
   },
   { path: '*', element: <NotFoundPage /> }

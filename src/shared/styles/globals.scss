@@ -149,32 +149,3 @@ hr {
   }
 
 }
-
-
-.admin-layout {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: var(--space-5);
-}
-
-.admin-layout aside {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
-  padding: var(--space-5);
-  height: fit-content;
-}
-
-.admin-layout aside nav {
-  display: grid;
-  gap: var(--space-2);
-  margin-top: var(--space-3);
-}
-
-@media (max-width: 900px) {
-  .admin-layout {
-    grid-template-columns: 1fr;
-  }
-
-}
