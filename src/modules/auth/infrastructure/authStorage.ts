@@ -13,6 +13,9 @@ export const authStorage = {
   getToken() {
     return authStorage.get()?.token ?? null;
   },
+  getRefreshToken() {
+    return authStorage.get()?.refreshToken ?? null;
+  },
   clear() {
     localStorage.removeItem(KEY);
   }
