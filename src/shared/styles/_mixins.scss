@@ -1,1 +1,10 @@
-@mixin container { width:min(1120px,92%); margin-inline:auto; }
+@mixin container {
+  width: min(var(--container-max-width), 92%);
+  margin-inline: auto;
+}
+
+@mixin responsive-grid($min: 240px) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min, 1fr));
+  gap: var(--space-5);
+}

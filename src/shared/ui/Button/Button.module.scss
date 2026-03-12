@@ -1,4 +1,28 @@
-.btn{padding:.75rem 1rem;border:none;border-radius:var(--radius-md);font-weight:600;cursor:pointer;transition:.2s}
-.btn:focus-visible{outline:2px solid var(--color-primary)}
-.primary{background:var(--color-primary);color:#fff}.primary:hover{opacity:.9}
-.secondary{background:#fff;border:1px solid var(--color-primary);color:var(--color-primary)}
+.btn {
+  padding: 0.75rem 1rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+.btn:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 45%, white);
+}
+
+.primary {
+  background: linear-gradient(120deg, var(--color-primary), var(--color-primary-strong));
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.primary:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.secondary {
+  background: var(--color-surface-soft);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
