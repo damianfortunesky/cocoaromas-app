@@ -9,6 +9,10 @@ export const API_ENDPOINTS = {
   },
   products: '/admin/products',
   productById: (id: string) => `/admin/products/${id}`,
+  stock: {
+    list: '/admin/products/stock',
+    byProductId: (id: string) => `/admin/products/${id}/stock`
+  },
   catalog: {
     products: '/catalog/products',
     productById: (id: string) => `/catalog/products/${id}`,

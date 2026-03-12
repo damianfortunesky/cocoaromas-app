@@ -1,0 +1,75 @@
+.container {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.header {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.cards {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.card {
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: grid;
+  gap: var(--space-2);
+  background: #fff;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.badge {
+  font-size: var(--font-size-xs);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill, 999px);
+  border: 1px solid;
+}
+
+.badgeOk { color: #115e59; background: #f0fdfa; border-color: #99f6e4; }
+.badgeLow { color: #92400e; background: #fffbeb; border-color: #fcd34d; }
+.badgeOut { color: #991b1b; background: #fef2f2; border-color: #fca5a5; }
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stockInput {
+  width: 96px;
+  padding: 8px;
+}
+
+.variantList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.variantRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.variantName { font-size: var(--font-size-sm); }
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
