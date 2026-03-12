@@ -20,5 +20,6 @@ export interface CatalogListResult {
 
 export interface CatalogRepository {
   list(filters: CatalogFilters): Promise<CatalogListResult>;
-  getById(id: string): Promise<Product | undefined>;
+  getByIdOrSlug(identifier: string): Promise<Product | undefined>;
+  getRelatedProducts(product: Product, limit?: number): Promise<Product[]>;
 }
