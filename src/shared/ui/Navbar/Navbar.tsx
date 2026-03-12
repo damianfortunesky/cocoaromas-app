@@ -12,9 +12,9 @@ export function Navbar({ onLogout }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { session, logoutMutation, isSessionLoading } = useAuth();
-  const { items } = useCart();
+  const { itemsCount } = useCart();
 
-  const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
+  const cartCount = itemsCount;
 
   const accountLabel = session ? 'Cuenta' : 'Login';
 
