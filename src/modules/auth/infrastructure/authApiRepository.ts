@@ -1,4 +1,10 @@
-import type { AuthRepository, LoginInput, LoginResponse } from '@/modules/auth/domain/auth.types';
+import type {
+  AuthRepository,
+  LoginInput,
+  LoginResponse,
+  RegisterInput,
+  RegisterResponse
+} from '@/modules/auth/domain/auth.types';
 import { authStorage } from '@/modules/auth/infrastructure/authStorage';
 import { API_ENDPOINTS } from '@/shared/api/apiEndpoints';
 import { httpClient } from '@/shared/api/httpClient';
@@ -58,6 +64,10 @@ export const authApiRepository: AuthRepository = {
     const session = toSession(normalizedResponse);
     authStorage.save(session);
     return session;
+  },
+  async register(input: RegisterInput) {
+    const { data } = await httpClient.post<RegisterResponse>(API_ENDPOINTS.auth.register, input);
+    return data;
   },
   async logout() {
     authStorage.clear();
