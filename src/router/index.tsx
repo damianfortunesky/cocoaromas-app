@@ -8,6 +8,7 @@ import { UnauthorizedPage } from '@/pages/UnauthorizedPage';
 import { UIShowcasePage } from '@/pages/UIShowcasePage';
 import { AppErrorPage } from '@/pages/AppErrorPage';
 import { LoginPage } from '@/modules/auth/presentation/pages/LoginPage';
+import { RegisterPage } from '@/modules/auth/presentation/pages/RegisterPage';
 import { CatalogPage } from '@/modules/catalog/presentation/pages/CatalogPage';
 import { ProductDetailPage } from '@/modules/catalog/presentation/pages/ProductDetailPage';
 import { CartPage } from '@/modules/cart/presentation/pages/CartPage';
@@ -27,6 +28,7 @@ export const router = createBrowserRouter([
       { path: 'catalogo', element: <CatalogPage /> },
       { path: 'catalogo/:id', element: <ProductDetailPage /> },
       { path: 'login', element: <LoginPage /> },
+      { path: 'register', element: <RegisterPage /> },
       { path: 'carrito', element: <CartPage /> },
       { path: 'checkout', element: <ProtectedRoute><CheckoutPage /></ProtectedRoute> },
       { path: 'mis-pedidos', element: <ProtectedRoute><MyOrdersPage /></ProtectedRoute> },

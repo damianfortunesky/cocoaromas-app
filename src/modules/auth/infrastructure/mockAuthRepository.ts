@@ -1,4 +1,4 @@
-import type { AuthRepository, LoginInput } from '@/modules/auth/domain/auth.types';
+import type { AuthRepository, LoginInput, RegisterInput } from '@/modules/auth/domain/auth.types';
 import { authStorage } from '@/modules/auth/infrastructure/authStorage';
 import { mockUsers } from '@/mocks/db';
 
@@ -11,6 +11,14 @@ export const mockAuthRepository: AuthRepository = {
     const session = { userId: user.id, email: user.email, role: user.role, token: `mock-jwt-${user.id}` };
     authStorage.save(session);
     return session;
+  },
+  async register(input: RegisterInput) {
+    const exists = mockUsers.some((user) => user.email.toLowerCase() === input.email.toLowerCase());
+    if (exists) {
+      throw new Error('El email ya se encuentra registrado.');
+    }
+
+    return { message: 'Registro exitoso.' };
   },
   async logout() {
     authStorage.clear();
