@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/shared/ui/Button/Button';
-import { mockProducts } from '@/mocks/db';
+import type { Product } from '@/modules/catalog/domain/catalog.types';
 import styles from './HomePage.module.scss';
 
 const categories = [
@@ -11,23 +11,61 @@ const categories = [
   { name: 'Adornos', icon: '✨', description: 'Detalles deco para tu espacio.' }
 ];
 
-const featuredProducts = [
-  ...mockProducts,
+const featuredProducts: Product[] = [
   {
-    id: 'p4',
+    id: 'home-1',
+    name: 'Sahumerio Lavanda',
+    price: 6000,
+    category: 'sahumerios',
+    description: 'Relajación premium con notas florales suaves.',
+    imageUrl: 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae',
+    active: true,
+    stock: 12,
+    attributes: { aroma: 'Lavanda' }
+  },
+  {
+    id: 'home-2',
+    name: 'Perfume Flor de Noche',
+    price: 28500,
+    category: 'perfumes',
+    description: 'Fragancia femenina sofisticada para uso diario.',
+    imageUrl: 'https://images.unsplash.com/photo-1594035910387-fea47794261f',
+    active: true,
+    stock: 7,
+    attributes: { fragancia: 'Floral' }
+  },
+  {
+    id: 'home-3',
+    name: 'Remera Essential',
+    price: 18900,
+    category: 'remeras',
+    description: 'Algodón premium y corte cómodo.',
+    imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab',
+    active: true,
+    stock: 9,
+    attributes: { talle: 'M' }
+  },
+  {
+    id: 'home-4',
     name: 'Jabón de Rosas',
     price: 4500,
     category: 'jabones',
     description: 'Espuma suave con aceites esenciales.',
-    imageUrl: 'https://images.unsplash.com/photo-1607006344380-b6775a0824d2'
+    imageUrl: 'https://images.unsplash.com/photo-1607006344380-b6775a0824d2',
+    active: true,
+    stock: 15,
+    attributes: { aroma: 'Rosas' }
   },
   {
-    id: 'p5',
+    id: 'home-5',
     name: 'Adorno Aura Dorada',
     price: 9800,
     category: 'adornos',
     description: 'Pieza decorativa para armonizar ambientes.',
-    imageUrl: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38'
+    imageUrl: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38',
+    active: true,
+    stock: 4,
+    attributes: { color: 'Dorado' }
   }
 ];
 

@@ -5,7 +5,6 @@ import { ProtectedRoute, RoleGuard } from '@/router/guards';
 import { HomePage } from '@/pages/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { UnauthorizedPage } from '@/pages/UnauthorizedPage';
-import { UIShowcasePage } from '@/pages/UIShowcasePage';
 import { AppErrorPage } from '@/pages/AppErrorPage';
 import { LoginPage } from '@/modules/auth/presentation/pages/LoginPage';
 import { RegisterPage } from '@/modules/auth/presentation/pages/RegisterPage';
@@ -32,8 +31,7 @@ export const router = createBrowserRouter([
       { path: 'carrito', element: <CartPage /> },
       { path: 'checkout', element: <ProtectedRoute><CheckoutPage /></ProtectedRoute> },
       { path: 'mis-pedidos', element: <ProtectedRoute><MyOrdersPage /></ProtectedRoute> },
-      { path: 'no-autorizado', element: <UnauthorizedPage /> },
-      { path: 'ui-showcase', element: <UIShowcasePage /> }
+      { path: 'no-autorizado', element: <UnauthorizedPage /> }
     ]
   },
   {

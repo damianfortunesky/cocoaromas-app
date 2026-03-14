@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import type { Product } from '@/mocks/db';
+import type { Product } from '@/modules/catalog/domain/catalog.types';
 import { Card } from '@/shared/ui/Card/Card';
 import { Badge } from '@/shared/ui/Badge/Badge';
 import { Button } from '@/shared/ui/Button/Button';

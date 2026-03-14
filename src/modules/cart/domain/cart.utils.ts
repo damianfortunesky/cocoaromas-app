@@ -1,4 +1,4 @@
-import type { Product } from '@/mocks/db';
+import type { Product } from '@/modules/catalog/domain/catalog.types';
 import { promotionsEngine } from '@/modules/promotions/domain/promotionEngine';
 import type { Promotion } from '@/modules/promotions/domain/promotion.types';
 import type {

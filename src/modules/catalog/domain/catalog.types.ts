@@ -1,4 +1,16 @@
-import type { Product } from '@/mocks/db';
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  category: string;
+  description: string;
+  imageUrl: string;
+  images?: string[];
+  active: boolean;
+  stock: number;
+  attributes: Record<string, string>;
+  variants?: Array<{ name: string; options: string[] }>;
+}
 
 export interface CatalogFilters {
   search?: string;

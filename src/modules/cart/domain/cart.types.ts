@@ -1,4 +1,4 @@
-import type { Product } from '@/mocks/db';
+import type { Product } from '@/modules/catalog/domain/catalog.types';
 import type { Promotion } from '@/modules/promotions/domain/promotion.types';
 
 export type CartItemSelection = Record<string, string>;
