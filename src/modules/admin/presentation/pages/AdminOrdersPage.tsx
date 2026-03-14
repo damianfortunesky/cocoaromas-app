@@ -105,7 +105,11 @@ export function AdminOrdersPage() {
         order={order}
         canManage={canManage}
         isSaving={updateStatus.isPending}
-        onUpdate={(orderId, nextStatus) => updateStatus.mutate({ id: orderId, status: nextStatus })}
+        onUpdate={(orderId, nextStatus) => {
+          const confirmed = window.confirm(`¿Confirmás cambiar el estado del pedido a ${nextStatus.replace('_', ' ')}?`);
+          if (!confirmed) return;
+          updateStatus.mutate({ id: orderId, status: nextStatus });
+        }}
       />,
       <div key={`actions-${order.id}`} className={styles.actions}>
         <Button type="button" variant="secondary" onClick={() => setSelectedOrderId(order.id)}>Ver detalle</Button>

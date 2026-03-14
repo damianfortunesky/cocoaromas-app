@@ -75,7 +75,7 @@ export const stockApiRepository = {
         }
       : { stock: payload.stock };
 
-    const { data } = await httpClient.put<ProductStockApiDto>(API_ENDPOINTS.stock.byProductId(payload.productId), body);
+    const { data } = await httpClient.patch<ProductStockApiDto>(API_ENDPOINTS.stock.byProductId(payload.productId), body);
     return toStockItem(data);
   }
 };

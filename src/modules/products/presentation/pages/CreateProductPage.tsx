@@ -1,16 +1,26 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { LoadingState } from '@/shared/ui/LoadingState/LoadingState';
-import { useAdminProducts, useCreateProduct, useDeleteProduct, useUpdateProduct } from '@/modules/products/application/useAdminProducts';
+import {
+  useAdminProducts,
+  useCreateProduct,
+  useDeleteProduct,
+  useToggleProductStatus,
+  useUpdateProduct
+} from '@/modules/products/application/useAdminProducts';
 import type { ProductCreateInput, ProductEntity } from '@/modules/products/domain/productAdmin.types';
 import { ProductListTable } from '@/modules/products/presentation/components/ProductListTable';
 import { ProductForm } from '@/modules/products/presentation/components/ProductForm';
 import { EmptyState } from '@/shared/ui/EmptyState/EmptyState';
 import { ErrorState } from '@/shared/ui/ErrorState/ErrorState';
 import { useToast } from '@/shared/ui/Toast/ToastProvider';
+import { Input } from '@/shared/ui/Input/Input';
+import { useCategories } from '@/modules/categories/application/useCategories';
 import styles from './CreateProductPage.module.scss';
 
 export function CreateProductPage() {
   const [editingProduct, setEditingProduct] = useState<ProductEntity | null>(null);
+  const [search, setSearch] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
 
   const {
     data: products = [],
@@ -18,14 +28,23 @@ export function CreateProductPage() {
     isError: isListError,
     error: listError,
     refetch
-  } = useAdminProducts();
+  } = useAdminProducts({ search: search.trim() || undefined, category: categoryFilter || undefined });
+
+  const { data: categories = [] } = useCategories();
 
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct();
+  const toggleProductStatus = useToggleProductStatus();
   const deleteProduct = useDeleteProduct();
   const { notify } = useToast();
 
-  const isMutating = createProduct.isPending || updateProduct.isPending || deleteProduct.isPending;
+  const isMutating =
+    createProduct.isPending || updateProduct.isPending || toggleProductStatus.isPending || deleteProduct.isPending;
+
+  const productCategories = useMemo(
+    () => categories,
+    [categories]
+  );
 
   const handleSubmitForm = async (payload: ProductCreateInput) => {
     if (editingProduct) {
@@ -48,7 +67,7 @@ export function CreateProductPage() {
   };
 
   const handleToggleStatus = async (product: ProductEntity) => {
-    await updateProduct.mutateAsync({ id: product.id, data: { active: !product.active } });
+    await toggleProductStatus.mutateAsync({ id: product.id, active: !product.active });
     notify({
       variant: 'success',
       title: `Producto ${product.active ? 'desactivado' : 'activado'}`,
@@ -63,6 +82,27 @@ export function CreateProductPage() {
         <p>Gestioná el catálogo: creá, editá, activá/desactivá y eliminá productos.</p>
       </header>
 
+      <div className={styles.filters}>
+        <Input
+          label="Buscar"
+          placeholder="Nombre o descripción"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+
+        <label>
+          Categoría
+          <select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}>
+            <option value="">Todas</option>
+            {productCategories.map((category) => (
+              <option key={category.id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
       {isLoadingProducts ? <LoadingState message="Cargando productos..." /> : null}
 
       {!isLoadingProducts && isListError ? (
@@ -73,12 +113,13 @@ export function CreateProductPage() {
         />
       ) : null}
 
-      {(createProduct.isError || updateProduct.isError || deleteProduct.isError) && (
+      {(createProduct.isError || updateProduct.isError || toggleProductStatus.isError || deleteProduct.isError) && (
         <ErrorState
           title="Error al guardar cambios"
           message={
             (createProduct.error as Error)?.message ??
             (updateProduct.error as Error)?.message ??
+            (toggleProductStatus.error as Error)?.message ??
             (deleteProduct.error as Error)?.message ??
             'No se pudo completar la operación.'
           }
@@ -103,6 +144,7 @@ export function CreateProductPage() {
       ) : null}
 
       <ProductForm
+        categories={productCategories}
         editingProduct={editingProduct}
         onCancelEdit={() => setEditingProduct(null)}
         onSubmitForm={handleSubmitForm}

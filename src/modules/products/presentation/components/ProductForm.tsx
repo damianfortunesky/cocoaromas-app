@@ -3,6 +3,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/shared/ui/Button/Button';
 import type { ProductEntity } from '@/modules/products/domain/productAdmin.types';
+import type { Category } from '@/modules/categories/domain/category.types';
 import {
   getDefaultProductFormValues,
   mapFormValuesToProductInput,
@@ -13,6 +14,7 @@ import styles from '@/modules/products/presentation/pages/CreateProductPage.modu
 
 type ProductFormProps = {
   editingProduct: ProductEntity | null;
+  categories: Category[];
   onCancelEdit: () => void;
   onSubmitForm: (values: ReturnType<typeof mapFormValuesToProductInput>) => Promise<void>;
   isSubmitting: boolean;
@@ -48,7 +50,7 @@ function VariantOptionsFields({ variantIndex, control, register, isSubmitting }:
   );
 }
 
-export function ProductForm({ editingProduct, onCancelEdit, onSubmitForm, isSubmitting }: ProductFormProps) {
+export function ProductForm({ editingProduct, categories, onCancelEdit, onSubmitForm, isSubmitting }: ProductFormProps) {
   const {
     control,
     register,
@@ -59,7 +61,6 @@ export function ProductForm({ editingProduct, onCancelEdit, onSubmitForm, isSubm
     resolver: zodResolver(productFormSchema),
     defaultValues: getDefaultProductFormValues(editingProduct ?? undefined)
   });
-
 
   useEffect(() => {
     reset(getDefaultProductFormValues(editingProduct ?? undefined));
@@ -102,7 +103,14 @@ export function ProductForm({ editingProduct, onCancelEdit, onSubmitForm, isSubm
         </label>
         <label>
           Categoría
-          <input {...register('category')} />
+          <select {...register('category')}>
+            <option value="">Seleccionar categoría</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.name}>
+                {category.name}
+              </option>
+            ))}
+          </select>
           {errors.category?.message && <small>{errors.category.message}</small>}
         </label>
         <label>

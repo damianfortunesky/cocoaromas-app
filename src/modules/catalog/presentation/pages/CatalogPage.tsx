@@ -6,6 +6,7 @@ import { EmptyState } from '@/shared/ui/EmptyState/EmptyState';
 import { ErrorState } from '@/shared/ui/ErrorState/ErrorState';
 import { LoadingState } from '@/shared/ui/LoadingState/LoadingState';
 import { useToast } from '@/shared/ui/Toast/ToastProvider';
+import { useCategories } from '@/modules/categories/application/useCategories';
 import styles from './CatalogPage.module.scss';
 
 type PriceFilter = 'all' | 'low' | 'mid' | 'high';
@@ -50,6 +51,7 @@ export function CatalogPage() {
   }, [availability, category, page, priceFilter, search, sort]);
 
   const { data, isLoading, isError, error, refetch, isFetching } = useCatalog(backendFilters);
+  const { data: categories = [] } = useCategories();
   const { addItem } = useCart();
   const { notify } = useToast();
 
@@ -92,9 +94,11 @@ export function CatalogPage() {
               onChange={(e) => handleFilterChange(() => setCategory(e.target.value))}
             >
               <option value="">Todas</option>
-              <option value="sahumerios">Sahumerios</option>
-              <option value="perfumes">Perfumes</option>
-              <option value="remeras">Remeras</option>
+              {categories.map((item) => (
+                <option key={item.id} value={item.name}>
+                  {item.name}
+                </option>
+              ))}
             </select>
           </div>
 
