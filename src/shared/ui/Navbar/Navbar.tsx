@@ -17,6 +17,7 @@ export function Navbar({ onLogout }: NavbarProps) {
   const cartCount = itemsCount;
 
   const accountLabel = session ? 'Cuenta' : 'Login';
+  const canAccessAdmin = session?.role === 'admin' || session?.role === 'owner' || session?.role === 'employee';
 
   const handleLogout = async () => {
     if (onLogout) {
@@ -66,6 +67,11 @@ export function Navbar({ onLogout }: NavbarProps) {
 
           {session ? (
             <>
+              {canAccessAdmin && (
+                <Link to="/admin" className={styles.accountButton} onClick={closeMenu}>
+                  🛠️ Admin
+                </Link>
+              )}
               <Link to="/mis-pedidos" className={styles.accountButton} onClick={closeMenu}>
                 👤 Cuenta
               </Link>
