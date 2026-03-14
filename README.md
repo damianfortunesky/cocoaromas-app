@@ -1,6 +1,6 @@
 # CocoAromas Frontend
 
-Frontend ecommerce profesional construido con **React + TypeScript + Vite + SCSS Modules**.
+Frontend ecommerce construido con **React + TypeScript + Vite + SCSS Modules** y conectado a API HTTP.
 
 ## Stack
 - React / React Router
@@ -19,71 +19,45 @@ src/
     <feature>/
       domain/          # entidades y contratos
       application/     # casos de uso + hooks
-      infrastructure/  # repositorios, adapters y mock services
+      infrastructure/  # repositorios/adapters HTTP
       presentation/    # páginas y componentes UI del módulo
   shared/
     api/               # cliente HTTP reusable
     styles/            # tokens, mixins y estilos base
     ui/                # componentes UI reutilizables
     types/             # tipos transversales
-  mocks/               # fake backend in-memory
 ```
 
-## Reglas del negocio implementadas
+## Reglas de negocio implementadas
 - Compra solo para usuarios autenticados (guard en `/checkout`).
 - Roles y permisos por ruta: admin/owner/employee/client.
-- Gestión de roles reservada conceptualmente a admin (listo para backend real).
 - Stock editable por admin/owner/employee.
 - Estados de pedidos editables por admin/employee.
-- Productos sin stock visibles y sombreados.
-- Base preparada para promociones desde backend.
-- Flujo transferencia bancaria y placeholder de Mercado Pago sin integración final.
+- Productos sin stock visibles y bloqueados para compra.
+- Cálculo de promociones aplicado sobre carrito y checkout.
 
-
-## Configuración API HTTP base
-- `src/shared/api/httpClient.ts`: instancia Axios reusable con `baseURL`, headers por defecto y manejo centralizado de errores.
-- `src/shared/api/httpErrors.ts`: normalización de errores HTTP para que la UI reciba un formato consistente.
-- `src/shared/api/apiEndpoints.ts`: catálogo centralizado de rutas para evitar URLs hardcodeadas en componentes.
-- `src/modules/products/infrastructure/productsApiRepository.ts`: ejemplo tipado de consumo `GET` y `POST` usando la capa base.
-
+## Configuración API HTTP
 Variables de entorno:
-- `VITE_API_URL`: URL base de la API Java REST.
-- `VITE_USE_MOCK_API`: `true` para mock local, `false` para repositorios HTTP.
+- `VITE_API_URL`: URL base de la API Java REST (default `http://localhost:8080/api`).
 
-## Integración backend Java (puntos claros)
-Actualmente se usan repositorios mock (`src/modules/**/infrastructure/mock*Repository.ts`).
-Para conectar API REST:
-1. Crear repositorios HTTP por módulo usando `httpClient`.
-2. Cambiar wiring en hooks de `application/` para inyectar repositorio HTTP.
-3. Mantener contratos de `domain/` para evitar refactor en UI.
-
-## Endpoints esperados (ejemplo)
+## Endpoints esperados (resumen)
 - `POST /auth/login`
-- `POST /auth/refresh` (futuro)
-- `GET /catalog/products?search=&category=&sort=&page=`
+- `POST /auth/register`
+- `GET /catalog/products`
 - `GET /catalog/products/:id`
-- `POST /admin/products`
-- `PATCH /admin/products/:id`
-- `PATCH /admin/products/:id/stock`
+- `GET /orders/me`
+- `POST /orders`
 - `GET /admin/orders`
 - `PATCH /admin/orders/:id/status`
+- `GET /admin/products`
+- `POST /admin/products`
+- `PATCH /admin/products/:id`
+- `DELETE /admin/products/:id`
 - `GET /promotions`
 - `POST /admin/promotions`
-- `POST /orders`
-- `GET /orders/me`
-
-## Mercado Pago (arquitectura preparada)
-- Método de pago modelado: `transfer | mercado_pago`.
-- Estado de orden desacoplado de UI.
-- Próximo paso: agregar `PaymentGateway` en `modules/orders/domain` y adapter MercadoPago en `infrastructure`.
 
 ## Correr proyecto
 ```bash
 npm install
 npm run dev
 ```
-
-Credenciales mock:
-- admin@cocoaromas.com / Admin123!
-- staff@cocoaromas.com / Staff123!
-- client@cocoaromas.com / Client123!

@@ -1,5 +1,4 @@
-import type { Product } from '@/mocks/db';
-import type { CatalogListResult, CatalogRepository } from '@/modules/catalog/domain/catalog.types';
+import type { CatalogListResult, CatalogRepository, Product } from '@/modules/catalog/domain/catalog.types';
 import { API_ENDPOINTS } from '@/shared/api/apiEndpoints';
 import { httpClient } from '@/shared/api/httpClient';
 import type { HttpError } from '@/shared/api/httpErrors';
