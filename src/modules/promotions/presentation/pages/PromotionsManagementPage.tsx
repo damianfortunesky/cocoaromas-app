@@ -11,6 +11,7 @@ import {
 } from '@/modules/promotions/application/usePromotions';
 import type { Promotion, PromotionUpsertInput } from '@/modules/promotions/domain/promotion.types';
 import { useAdminProducts } from '@/modules/products/application/useAdminProducts';
+import { useCategories } from '@/modules/categories/application/useCategories';
 import { Alert } from '@/shared/ui/Alert/Alert';
 import { DataTable } from '@/shared/ui/DataTable/DataTable';
 import { Button } from '@/shared/ui/Button/Button';
@@ -117,6 +118,7 @@ const toFormValues = (promotion: Promotion): PromotionFormValues => ({
 export function PromotionsManagementPage() {
   const { data: promotions = [], isLoading, isError } = usePromotions();
   const { data: products = [] } = useAdminProducts();
+  const { data: categories = [] } = useCategories();
 
   const createPromotion = useCreatePromotion();
   const updatePromotion = useUpdatePromotion();
@@ -126,10 +128,7 @@ export function PromotionsManagementPage() {
   const [editingPromotionId, setEditingPromotionId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<FeedbackState>(null);
 
-  const categories = useMemo(
-    () => Array.from(new Set(products.map((product) => product.category))).sort((a, b) => a.localeCompare(b)),
-    [products]
-  );
+  const categoryOptions = useMemo(() => categories, [categories]);
 
   const {
     register,
@@ -261,7 +260,11 @@ export function PromotionsManagementPage() {
 
       {feedback && <Alert variant={feedback.variant}>{feedback.message}</Alert>}
 
-      {!isLoading && !isError && (
+      {!isLoading && !isError && promotions.length === 0 && (
+        <Alert variant="info">Todavía no hay promociones cargadas.</Alert>
+      )}
+
+      {!isLoading && !isError && promotions.length > 0 && (
         <DataTable
           headers={['Nombre', 'Modalidad', 'Tipo descuento', 'Valor', 'Condición', 'Vigencia', 'Estado', 'Acciones']}
           rows={rows}
@@ -331,9 +334,9 @@ export function PromotionsManagementPage() {
               Categoría
               <select {...register('category')}>
                 <option value="">Seleccionar categoría</option>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
+                {categoryOptions.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
                   </option>
                 ))}
               </select>

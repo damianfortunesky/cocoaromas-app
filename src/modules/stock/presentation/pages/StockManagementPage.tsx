@@ -6,6 +6,7 @@ import type { StockItem, VariantStock } from '@/modules/stock/domain/stock.types
 import { Alert } from '@/shared/ui/Alert/Alert';
 import { Button } from '@/shared/ui/Button/Button';
 import { Loader } from '@/shared/ui/Loader/Loader';
+import { EmptyState } from '@/shared/ui/EmptyState/EmptyState';
 import styles from './StockManagementPage.module.scss';
 
 const badgeByLevel = {
@@ -131,7 +132,15 @@ export function StockManagementPage() {
       {isPending && <div className={styles.loading}><Loader /> Cargando stock...</div>}
       {isError && <Alert variant="danger" title="No se pudo cargar el stock">{error.message}</Alert>}
 
-      {!isPending && !isError && (
+
+      {!isPending && !isError && data.length === 0 && (
+        <EmptyState
+          title="Sin productos de stock"
+          message="No hay registros de stock para mostrar en este momento."
+        />
+      )}
+
+      {!isPending && !isError && data.length > 0 && (
         <div className={styles.cards}>
           {data.map((item) => (
             <ProductStockCard

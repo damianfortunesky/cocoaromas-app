@@ -2,6 +2,7 @@ export const API_ENDPOINTS = {
   auth: {
     login: '/auth/login',
     register: '/auth/register',
+    me: '/auth/me',
     refresh: '/auth/refresh'
   },
   orders: {
@@ -13,18 +14,20 @@ export const API_ENDPOINTS = {
   },
   products: '/admin/products',
   productById: (id: string) => `/admin/products/${id}`,
+  productStatusById: (id: string) => `/admin/products/${id}/status`,
   stock: {
-    list: '/admin/products/stock',
-    byProductId: (id: string) => `/admin/products/${id}/stock`
+    list: '/admin/stocks',
+    byProductId: (id: string) => `/admin/stocks/${id}`
   },
   promotions: '/admin/promotions',
   promotionById: (id: string) => `/admin/promotions/${id}`,
-  promotionToggle: (id: string) => `/admin/promotions/${id}/active`,
+  promotionStatusById: (id: string) => `/admin/promotions/${id}/status`,
+  categories: '/categories',
   catalog: {
-    products: '/catalog/products',
-    productById: (id: string) => `/catalog/products/${id}`,
-    productBySlug: (slug: string) => `/catalog/products/slug/${slug}`,
-    productByIdentifier: (identifier: string) => `/catalog/products/${identifier}`,
-    relatedProducts: (identifier: string) => `/catalog/products/${identifier}/related`
+    products: '/products',
+    productById: (id: string) => `/products/${id}`,
+    productBySlug: (slug: string) => `/products/slug/${slug}`,
+    productByIdentifier: (identifier: string) => `/products/${identifier}`,
+    relatedProducts: (identifier: string) => `/products/${identifier}/related`
   }
 } as const;

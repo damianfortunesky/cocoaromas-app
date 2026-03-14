@@ -17,6 +17,13 @@ export type ProductEntity = {
   active: boolean;
 };
 
-export type ProductCreateInput = Omit<ProductEntity, 'id'>;
+export type ProductCreateInput = Omit<ProductEntity, 'id' | 'category'> & {
+  category: string;
+};
 
 export type ProductUpdateInput = Partial<ProductCreateInput>;
+
+export type ProductListFilters = {
+  search?: string;
+  category?: string;
+};

@@ -14,7 +14,7 @@ type UnauthorizedHandler = () => void;
 let authTokenProvider: AuthTokenProvider | null = null;
 let unauthorizedHandler: UnauthorizedHandler | null = null;
 
-const PUBLIC_ENDPOINT_PREFIXES = ['/catalog/', '/auth/login', '/auth/register'];
+const PUBLIC_ENDPOINT_PREFIXES = ['/products', '/categories', '/auth/login', '/auth/register'];
 
 export const setAuthTokenProvider = (provider: AuthTokenProvider) => {
   authTokenProvider = provider;

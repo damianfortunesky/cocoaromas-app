@@ -59,7 +59,7 @@ export const promotionsApiRepository = {
     return toPromotionEntity(data);
   },
   async toggle(id: string, active: boolean): Promise<Promotion> {
-    const { data } = await httpClient.patch<PromotionApiDto>(API_ENDPOINTS.promotionToggle(id), { active });
+    const { data } = await httpClient.patch<PromotionApiDto>(API_ENDPOINTS.promotionStatusById(id), { active });
     return toPromotionEntity(data);
   },
   async remove(id: string): Promise<void> {

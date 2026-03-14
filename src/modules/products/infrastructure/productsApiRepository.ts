@@ -1,6 +1,12 @@
 import { httpClient } from '@/shared/api/httpClient';
 import { API_ENDPOINTS } from '@/shared/api/apiEndpoints';
-import type { ProductCreateInput, ProductEntity, ProductUpdateInput, ProductVariant } from '@/modules/products/domain/productAdmin.types';
+import type {
+  ProductCreateInput,
+  ProductEntity,
+  ProductListFilters,
+  ProductUpdateInput,
+  ProductVariant
+} from '@/modules/products/domain/productAdmin.types';
 
 type ProductApiDto = {
   id?: string | number;
@@ -8,6 +14,8 @@ type ProductApiDto = {
   title?: string;
   description?: string;
   category?: string;
+  categoryId?: string | number;
+  categoryName?: string;
   price?: number | string;
   stock?: number | string;
   imageUrl?: string;
@@ -60,7 +68,7 @@ const toProductEntity = (dto: ProductApiDto): ProductEntity => {
     id: String(dto.id ?? ''),
     name: dto.name ?? dto.title ?? 'Producto sin nombre',
     description: dto.description ?? '',
-    category: dto.category ?? '',
+    category: dto.categoryName ?? dto.category ?? String(dto.categoryId ?? ''),
     price: toNumber(dto.price),
     stock: toNumber(dto.stock),
     imageUrl,
@@ -72,8 +80,13 @@ const toProductEntity = (dto: ProductApiDto): ProductEntity => {
 };
 
 export const productsApiRepository = {
-  async list(): Promise<ProductEntity[]> {
-    const { data } = await httpClient.get<ProductApiDto[] | { items?: ProductApiDto[]; data?: ProductApiDto[] }>(API_ENDPOINTS.products);
+  async list(filters: ProductListFilters = {}): Promise<ProductEntity[]> {
+    const { data } = await httpClient.get<ProductApiDto[] | { items?: ProductApiDto[]; data?: ProductApiDto[] }>(API_ENDPOINTS.products, {
+      params: {
+        search: filters.search,
+        category: filters.category
+      }
+    });
     const items = Array.isArray(data) ? data : data.items ?? data.data ?? [];
     return items.map(toProductEntity);
   },
@@ -83,6 +96,10 @@ export const productsApiRepository = {
   },
   async update(id: string, payload: ProductUpdateInput): Promise<ProductEntity> {
     const { data } = await httpClient.put<ProductApiDto>(API_ENDPOINTS.productById(id), payload);
+    return toProductEntity(data);
+  },
+  async updateStatus(id: string, active: boolean): Promise<ProductEntity> {
+    const { data } = await httpClient.patch<ProductApiDto>(API_ENDPOINTS.productStatusById(id), { active });
     return toProductEntity(data);
   },
   async remove(id: string): Promise<void> {
