@@ -14,6 +14,8 @@ type UnauthorizedHandler = () => void;
 let authTokenProvider: AuthTokenProvider | null = null;
 let unauthorizedHandler: UnauthorizedHandler | null = null;
 
+const PUBLIC_ENDPOINT_PREFIXES = ['/catalog/', '/auth/login', '/auth/register'];
+
 export const setAuthTokenProvider = (provider: AuthTokenProvider) => {
   authTokenProvider = provider;
 };
@@ -40,7 +42,10 @@ const onRequest = (config: InternalAxiosRequestConfig) => {
 };
 
 const onResponseError = (error: AxiosError) => {
-  if (error.response?.status === 401) {
+  const requestUrl = error.config?.url ?? '';
+  const isPublicEndpoint = PUBLIC_ENDPOINT_PREFIXES.some((prefix) => requestUrl.startsWith(prefix));
+
+  if (error.response?.status === 401 && !isPublicEndpoint) {
     unauthorizedHandler?.();
   }
 

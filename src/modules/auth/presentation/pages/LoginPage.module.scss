@@ -31,3 +31,18 @@
     font-weight: 600;
   }
 }
+
+
+.rememberField {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+
+  input {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--color-brand-600);
+  }
+}

@@ -12,7 +12,8 @@ import styles from './LoginPage.module.scss';
 
 const schema = z.object({
   email: z.string().email('Ingresá un email válido.'),
-  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres.')
+  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres.'),
+  remember: z.boolean().optional()
 });
 type FormData = z.infer<typeof schema>;
 
@@ -28,7 +29,10 @@ export function LoginPage() {
   const { notify } = useToast();
   const locationState = (location.state as LoginLocationState | null) ?? null;
   const redirectTo = locationState?.from ?? '/';
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: zodResolver(schema) });
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: { remember: true }
+  });
 
   useEffect(() => {
     if (!locationState?.registered) {
@@ -45,7 +49,7 @@ export function LoginPage() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      await loginMutation.mutateAsync(data);
+      await loginMutation.mutateAsync({ email: data.email, password: data.password });
       notify({ variant: 'success', title: 'Bienvenido de nuevo', message: 'Inicio de sesión exitoso.' });
       navigate(redirectTo, { replace: true });
     } catch {
@@ -61,6 +65,10 @@ export function LoginPage() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Input label="Email" type="email" error={errors.email?.message} {...register('email')} />
         <Input label="Contraseña" type="password" error={errors.password?.message} {...register('password')} />
+        <label className={styles.rememberField}>
+          <input type="checkbox" {...register('remember')} />
+          <span>Recordar mi contraseña</span>
+        </label>
         <Button loading={loginMutation.isPending} type="submit">Ingresar</Button>
       </form>
       {loginMutation.isError && <p className={styles.error}>{loginErrorMessage}</p>}
