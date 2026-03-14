@@ -2,19 +2,19 @@
   margin-top: auto;
   width: min(1100px, calc(100% - 2rem));
   margin-inline: auto;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
   border: 1px solid var(--color-border);
   border-radius: 24px;
   background: linear-gradient(145deg, #fff8f6 0%, #fff 58%);
   box-shadow: 0 16px 35px rgba(66, 44, 28, 0.1);
-  padding: 1.5rem;
+  padding: 1.25rem;
 }
 
 .content {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .brandBlock {
@@ -37,7 +37,7 @@
 .infoGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(190px, 1fr));
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .infoItem {
@@ -66,9 +66,9 @@
 }
 
 .legal {
-  margin-top: 1.25rem;
+  margin-top: 1rem;
   border-top: 1px solid rgba(173, 133, 104, 0.24);
-  padding-top: 0.95rem;
+  padding-top: 0.8rem;
   font-size: 0.85rem;
   color: var(--color-text-muted);
 }

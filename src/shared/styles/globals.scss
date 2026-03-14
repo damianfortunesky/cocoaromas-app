@@ -65,7 +65,7 @@ p {
 
 main {
   @include mixins.container;
-  margin: var(--space-6) auto var(--space-8);
+  margin: var(--space-6) auto;
 }
 
 section {
