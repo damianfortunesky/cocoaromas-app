@@ -20,6 +20,7 @@ Este directorio documenta las tareas solicitadas para construir **cocoaromas-app
 10. [Task 10 - Gestión administrativa de promociones](./task-10-admin-promociones-frontend.md)
 11. [Task 11 - Registro público de usuarios](./task-11-registro-publico-frontend.md)
 12. [Task 12 - Refactorización según contexto](./task-12-refactorizacion-segun-contexto-frontend.md)
+13. [Task 13 - Alineación endpoint de login y base URL de API](./task-13-alineacion-endpoint-login-api-base-url.md)
 
 ## Plantilla sugerida para próximos pedidos
 - **Título de task**

@@ -38,7 +38,7 @@ src/
 
 ## Configuración API HTTP
 Variables de entorno:
-- `VITE_API_URL`: URL base de la API Java REST (default `http://localhost:8080/api`).
+- `VITE_API_URL`: URL base de la API Java REST (default `http://localhost:8080/api/v1`).
 
 ## Endpoints esperados (resumen)
 - `POST /auth/login`
@@ -58,6 +58,9 @@ Variables de entorno:
 
 ## Correr proyecto
 ```bash
+cp .env.example .env
 npm install
 npm run dev
 ```
+
+Con la configuración por defecto, el login se ejecuta contra `POST http://localhost:8080/api/v1/auth/login`.
