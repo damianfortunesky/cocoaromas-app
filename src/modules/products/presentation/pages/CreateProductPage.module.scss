@@ -3,6 +3,22 @@
   gap: 1.5rem;
 }
 
+.container header {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.createButton {
+  width: fit-content;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 35%, white);
+  border-radius: var(--radius-pill);
+  padding: 0.58rem 0.95rem;
+  background: color-mix(in srgb, var(--color-primary-soft) 72%, white);
+  color: var(--color-primary-strong);
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .filters {
   display: grid;
   gap: 0.75rem;

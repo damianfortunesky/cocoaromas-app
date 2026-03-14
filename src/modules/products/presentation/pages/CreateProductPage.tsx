@@ -19,6 +19,7 @@ import styles from './CreateProductPage.module.scss';
 
 export function CreateProductPage() {
   const [editingProduct, setEditingProduct] = useState<ProductEntity | null>(null);
+  const [showForm, setShowForm] = useState(false);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
 
@@ -50,11 +51,13 @@ export function CreateProductPage() {
     if (editingProduct) {
       await updateProduct.mutateAsync({ id: editingProduct.id, data: payload });
       setEditingProduct(null);
+      setShowForm(false);
       notify({ variant: 'success', title: 'Producto actualizado', message: 'Los cambios se guardaron correctamente.' });
       return;
     }
 
     await createProduct.mutateAsync(payload);
+    setShowForm(false);
     notify({ variant: 'success', title: 'Producto creado', message: 'El producto se creó correctamente.' });
   };
 
@@ -75,11 +78,17 @@ export function CreateProductPage() {
     });
   };
 
+  const isFormVisible = showForm || Boolean(editingProduct);
+
   return (
     <section className={styles.container}>
       <header>
         <h1>Administración de productos</h1>
         <p>Gestioná el catálogo: creá, editá, activá/desactivá y eliminá productos.</p>
+
+        <button type="button" className={styles.createButton} onClick={() => setShowForm((value) => !value)}>
+          {isFormVisible && !editingProduct ? 'Ocultar formulario' : 'Crear producto'}
+        </button>
       </header>
 
       <div className={styles.filters}>
@@ -143,13 +152,18 @@ export function CreateProductPage() {
         />
       ) : null}
 
-      <ProductForm
-        categories={productCategories}
-        editingProduct={editingProduct}
-        onCancelEdit={() => setEditingProduct(null)}
-        onSubmitForm={handleSubmitForm}
-        isSubmitting={isMutating}
-      />
+      {isFormVisible && (
+        <ProductForm
+          categories={productCategories}
+          editingProduct={editingProduct}
+          onCancelEdit={() => {
+            setEditingProduct(null);
+            setShowForm(false);
+          }}
+          onSubmitForm={handleSubmitForm}
+          isSubmitting={isMutating}
+        />
+      )}
     </section>
   );
 }

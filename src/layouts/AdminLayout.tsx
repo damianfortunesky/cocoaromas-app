@@ -6,8 +6,7 @@ const adminNavigation = [
   { label: 'Productos', to: '/admin/productos' },
   { label: 'Stock', to: '/admin/stock' },
   { label: 'Pedidos', to: '/admin/pedidos' },
-  { label: 'Promociones', to: '/admin/promociones' },
-  { label: 'Usuarios', to: '/admin/usuarios' }
+  { label: 'Promociones', to: '/admin/promociones' }
 ];
 
 export function AdminLayout() {
@@ -16,6 +15,8 @@ export function AdminLayout() {
       <aside className={styles.sidebar}>
         <p className={styles.eyebrow}>Panel administrativo</p>
         <h2>CocoAromas</h2>
+        <p className={styles.subtitle}>Operación comercial interna</p>
+
         <nav aria-label="Navegación administración" className={styles.nav}>
           {adminNavigation.map((item) => (
             <NavLink
