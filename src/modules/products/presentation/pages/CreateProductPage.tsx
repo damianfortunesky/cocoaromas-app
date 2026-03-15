@@ -14,7 +14,7 @@ import { EmptyState } from '@/shared/ui/EmptyState/EmptyState';
 import { ErrorState } from '@/shared/ui/ErrorState/ErrorState';
 import { useToast } from '@/shared/ui/Toast/ToastProvider';
 import { Input } from '@/shared/ui/Input/Input';
-import { useCategories } from '@/modules/categories/application/useCategories';
+import { useAdminCategories } from '@/modules/categories/application/useCategories';
 import styles from './CreateProductPage.module.scss';
 
 export function CreateProductPage() {
@@ -31,7 +31,7 @@ export function CreateProductPage() {
     refetch
   } = useAdminProducts({ search: search.trim() || undefined, category: categoryFilter || undefined });
 
-  const { data: categories = [] } = useCategories();
+  const { data: categories = [] } = useAdminCategories();
 
   const createProduct = useCreateProduct();
   const updateProduct = useUpdateProduct();

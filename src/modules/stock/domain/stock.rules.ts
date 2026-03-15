@@ -16,10 +16,11 @@ const normalizeStock = (stock: number): number => Math.max(0, Number.isFinite(st
 export const normalizeVariantStock = (variants: VariantStock[]): VariantStock[] =>
   variants.map((variant) => ({ ...variant, stock: normalizeStock(variant.stock) }));
 
-export const toStockUpdatePayload = (item: StockItem, nextStock: number, nextVariantStock?: VariantStock[]): StockUpdatePayload => ({
+export const toStockUpdatePayload = (item: StockItem, nextStock: number, nextVariantStock?: VariantStock[], reason?: string): StockUpdatePayload => ({
   productId: item.productId,
   stock: normalizeStock(nextStock),
-  variantStock: item.hasVariantStock && nextVariantStock ? normalizeVariantStock(nextVariantStock) : undefined
+  variantStock: item.hasVariantStock && nextVariantStock ? normalizeVariantStock(nextVariantStock) : undefined,
+  reason: reason?.trim() ? reason.trim() : undefined
 });
 
 export const canEditStock = (role?: Role): boolean => !!role && stockEditors.includes(role);

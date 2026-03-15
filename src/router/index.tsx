@@ -13,12 +13,14 @@ import { ProductDetailPage } from '@/modules/catalog/presentation/pages/ProductD
 import { CartPage } from '@/modules/cart/presentation/pages/CartPage';
 import { CheckoutPage } from '@/modules/orders/presentation/pages/CheckoutPage';
 import { MyOrdersPage } from '@/modules/orders/presentation/pages/MyOrdersPage';
+import { MyAccountPage } from '@/modules/account/presentation/pages/MyAccountPage';
 import { AdminDashboardPage } from '@/modules/admin/presentation/pages/AdminDashboardPage';
 import { CreateProductPage } from '@/modules/products/presentation/pages/CreateProductPage';
 import { StockManagementPage } from '@/modules/stock/presentation/pages/StockManagementPage';
 import { PromotionsManagementPage } from '@/modules/promotions/presentation/pages/PromotionsManagementPage';
 import { AdminOrdersPage } from '@/modules/admin/presentation/pages/AdminOrdersPage';
 import { AdminUsersPage } from '@/modules/admin/presentation/pages/AdminUsersPage';
+import { CategoriesManagementPage } from '@/modules/categories/presentation/pages/CategoriesManagementPage';
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +32,7 @@ export const router = createBrowserRouter([
       { path: 'register', element: <RegisterPage /> },
       { path: 'carrito', element: <CartPage /> },
       { path: 'checkout', element: <ProtectedRoute><CheckoutPage /></ProtectedRoute> },
+      { path: 'mi-cuenta', element: <ProtectedRoute><MyAccountPage /></ProtectedRoute> },
       { path: 'mis-pedidos', element: <ProtectedRoute><MyOrdersPage /></ProtectedRoute> },
       { path: 'no-autorizado', element: <UnauthorizedPage /> }
     ]
@@ -44,6 +47,7 @@ export const router = createBrowserRouter([
       { path: 'stock', element: <RoleGuard allowed={['admin', 'owner', 'employee']}><StockManagementPage /></RoleGuard> },
       { path: 'pedidos', element: <RoleGuard allowed={['admin', 'employee']}><AdminOrdersPage /></RoleGuard> },
       { path: 'promociones', element: <RoleGuard allowed={['admin']}><PromotionsManagementPage /></RoleGuard> },
+      { path: 'categorias', element: <RoleGuard allowed={['admin', 'owner', 'employee']}><CategoriesManagementPage /></RoleGuard> },
       { path: 'usuarios', element: <RoleGuard allowed={['admin']}><AdminUsersPage /></RoleGuard> }
     ]
   },

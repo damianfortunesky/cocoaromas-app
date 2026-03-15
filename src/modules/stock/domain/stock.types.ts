@@ -21,6 +21,7 @@ export type StockUpdatePayload = {
   productId: string;
   stock: number;
   variantStock?: VariantStock[];
+  reason?: string;
 };
 
 export type StockAuditDraft = {

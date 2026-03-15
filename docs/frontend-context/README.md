@@ -32,3 +32,5 @@ Este directorio documenta las tareas solicitadas para construir **cocoaromas-app
 - **Criterios de aceptación**
 - **No objetivos**
 - **Notas de trazabilidad**
+
+14. [Task 21 - Frontend flows mínimos viables](./task-21-frontend-flows-minimos-viables.md)

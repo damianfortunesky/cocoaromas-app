@@ -23,6 +23,13 @@ export const API_ENDPOINTS = {
   promotionById: (id: string) => `/admin/promotions/${id}`,
   promotionStatusById: (id: string) => `/admin/promotions/${id}/status`,
   categories: '/categories',
+  adminCategories: '/admin/categories',
+  adminCategoryById: (id: string) => `/admin/categories/${id}`,
+  me: {
+    profile: '/me/profile',
+    addresses: '/me/addresses',
+    addressById: (id: string) => `/me/addresses/${id}`
+  },
   catalog: {
     products: '/products',
     productById: (id: string) => `/products/${id}`,

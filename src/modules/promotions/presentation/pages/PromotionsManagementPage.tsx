@@ -11,7 +11,7 @@ import {
 } from '@/modules/promotions/application/usePromotions';
 import type { Promotion, PromotionUpsertInput } from '@/modules/promotions/domain/promotion.types';
 import { useAdminProducts } from '@/modules/products/application/useAdminProducts';
-import { useCategories } from '@/modules/categories/application/useCategories';
+import { useAdminCategories } from '@/modules/categories/application/useCategories';
 import { Alert } from '@/shared/ui/Alert/Alert';
 import { DataTable } from '@/shared/ui/DataTable/DataTable';
 import { Button } from '@/shared/ui/Button/Button';
@@ -118,7 +118,7 @@ const toFormValues = (promotion: Promotion): PromotionFormValues => ({
 export function PromotionsManagementPage() {
   const { data: promotions = [], isLoading, isError } = usePromotions();
   const { data: products = [] } = useAdminProducts();
-  const { data: categories = [] } = useCategories();
+  const { data: categories = [] } = useAdminCategories();
 
   const createPromotion = useCreatePromotion();
   const updatePromotion = useUpdatePromotion();

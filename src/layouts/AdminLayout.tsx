@@ -6,7 +6,8 @@ const adminNavigation = [
   { label: 'Productos', to: '/admin/productos' },
   { label: 'Stock', to: '/admin/stock' },
   { label: 'Pedidos', to: '/admin/pedidos' },
-  { label: 'Promociones', to: '/admin/promociones' }
+  { label: 'Promociones', to: '/admin/promociones' },
+  { label: 'Categorías', to: '/admin/categorias' }
 ];
 
 export function AdminLayout() {
