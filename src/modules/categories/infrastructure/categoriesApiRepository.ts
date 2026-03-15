@@ -7,17 +7,14 @@ type CategoryApiDto = {
   name?: string;
   title?: string;
   slug?: string;
-  description?: string;
-  active?: boolean;
-  isActive?: boolean;
+  displayOrder?: number | string;
 };
 
 const toCategory = (dto: CategoryApiDto, index: number): Category => ({
   id: String(dto.id ?? dto.slug ?? dto.name ?? `category-${index + 1}`),
   name: dto.name ?? dto.title ?? 'Sin nombre',
-  slug: dto.slug,
-  description: dto.description,
-  active: dto.active ?? dto.isActive
+  slug: dto.slug ?? '',
+  displayOrder: Number(dto.displayOrder ?? 0)
 });
 
 const normalizeList = (data: CategoryApiDto[] | { items?: CategoryApiDto[]; data?: CategoryApiDto[] }): CategoryApiDto[] =>

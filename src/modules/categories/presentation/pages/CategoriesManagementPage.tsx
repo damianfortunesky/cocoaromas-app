@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   useAdminCategories,
   useCreateCategory,
@@ -12,7 +12,17 @@ import { DataTable } from '@/shared/ui/DataTable/DataTable';
 import { Loader } from '@/shared/ui/Loader/Loader';
 import styles from './CategoriesManagementPage.module.scss';
 
-const emptyForm = { name: '', slug: '', description: '' };
+const emptyForm = { name: '', displayOrder: 0 };
+
+const generateSlug = (name: string) =>
+  name
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-');
 
 export function CategoriesManagementPage() {
   const { data: categories = [], isLoading, isError } = useAdminCategories();
@@ -25,16 +35,21 @@ export function CategoriesManagementPage() {
 
   const isMutating = createCategory.isPending || updateCategory.isPending || deleteCategory.isPending;
 
+  const sortedCategories = useMemo(
+    () => [...categories].sort((a, b) => a.displayOrder - b.displayOrder),
+    [categories]
+  );
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!form.name.trim()) return;
+    const trimmedName = form.name.trim();
+    if (!trimmedName) return;
 
     const payload = {
-      name: form.name.trim(),
-      slug: form.slug.trim() || undefined,
-      description: form.description.trim() || undefined,
-      active: true
+      name: trimmedName,
+      slug: generateSlug(trimmedName),
+      displayOrder: form.displayOrder
     };
 
     if (editing) {
@@ -51,15 +66,14 @@ export function CategoriesManagementPage() {
     setEditing(category);
     setForm({
       name: category.name,
-      slug: category.slug ?? '',
-      description: category.description ?? ''
+      displayOrder: category.displayOrder
     });
   };
 
-  const rows = categories.map((category) => [
+  const rows = sortedCategories.map((category) => [
+    category.displayOrder,
     category.name,
-    category.slug ?? '-',
-    category.description ?? '-',
+    category.slug || '-',
     <div key={category.id} className={styles.actions}>
       <Button type="button" variant="secondary" onClick={() => startEdit(category)}>Editar</Button>
       <Button type="button" variant="secondary" onClick={() => void deleteCategory.mutateAsync(category.id)}>Eliminar</Button>
@@ -79,8 +93,8 @@ export function CategoriesManagementPage() {
         <Alert variant="danger">No se pudo completar la operación en categorías.</Alert>
       )}
 
-      {!isLoading && !isError && categories.length > 0 && (
-        <DataTable headers={['Nombre', 'Slug', 'Descripción', 'Acciones']} rows={rows} />
+      {!isLoading && !isError && sortedCategories.length > 0 && (
+        <DataTable headers={['Orden', 'Nombre', 'Slug', 'Acciones']} rows={rows} />
       )}
 
       <article className={styles.formCard}>
@@ -91,12 +105,17 @@ export function CategoriesManagementPage() {
             <input value={form.name} onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))} />
           </label>
           <label>
-            Slug
-            <input value={form.slug} onChange={(event) => setForm((prev) => ({ ...prev, slug: event.target.value }))} />
-          </label>
-          <label>
-            Descripción
-            <textarea value={form.description} onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))} />
+            Orden de visualización
+            <input
+              type="number"
+              value={form.displayOrder}
+              onChange={(event) =>
+                setForm((prev) => ({
+                  ...prev,
+                  displayOrder: Number(event.target.value)
+                }))
+              }
+            />
           </label>
 
           <div className={styles.actions}>
