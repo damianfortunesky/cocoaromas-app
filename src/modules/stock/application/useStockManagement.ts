@@ -29,8 +29,8 @@ export const useUpdateStock = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (params: { item: StockItem; nextStock: number; variantStock?: VariantStock[]; role: Role }) => {
-      const payload = toStockUpdatePayload(params.item, params.nextStock, params.variantStock);
+    mutationFn: (params: { item: StockItem; nextStock: number; variantStock?: VariantStock[]; role: Role; reason?: string }) => {
+      const payload = toStockUpdatePayload(params.item, params.nextStock, params.variantStock, params.reason);
       const auditDraft = buildStockAuditDraft({ item: params.item, nextStock: payload.stock, role: params.role });
 
       void auditDraft;

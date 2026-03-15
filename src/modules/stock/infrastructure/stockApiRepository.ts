@@ -71,9 +71,10 @@ export const stockApiRepository = {
             id: variant.id,
             name: variant.name,
             stock: Math.max(0, Math.floor(variant.stock))
-          }))
+          })),
+          reason: payload.reason
         }
-      : { stock: payload.stock };
+      : { stock: payload.stock, reason: payload.reason };
 
     const { data } = await httpClient.patch<ProductStockApiDto>(API_ENDPOINTS.stock.byProductId(payload.productId), body);
     return toStockItem(data);

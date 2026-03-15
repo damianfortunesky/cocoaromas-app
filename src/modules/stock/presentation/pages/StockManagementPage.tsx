@@ -18,11 +18,12 @@ const badgeByLevel = {
 function ProductStockCard({ item, editable, onSave, isSaving }: {
   item: StockItem;
   editable: boolean;
-  onSave: (nextStock: number, nextVariants?: VariantStock[]) => void;
+  onSave: (nextStock: number, nextVariants?: VariantStock[], reason?: string) => void;
   isSaving: boolean;
 }) {
   const [stock, setStock] = useState(item.totalStock);
   const [variantStock, setVariantStock] = useState(item.variantStock);
+  const [reason, setReason] = useState('');
 
   const hasChanges = useMemo(() => {
     if (stock !== item.totalStock) return true;
@@ -86,12 +87,24 @@ function ProductStockCard({ item, editable, onSave, isSaving }: {
         </div>
       )}
 
+      <label className={styles.reasonField}>
+        Motivo del ajuste
+        <input
+          className={styles.stockInput}
+          type="text"
+          placeholder="Ej: ajuste por inventario"
+          value={reason}
+          disabled={!editable}
+          onChange={(event) => setReason(event.target.value)}
+        />
+      </label>
+
       <div>
         <Button
           type="button"
           loading={isSaving}
           disabled={!editable || !hasChanges || isSaving}
-          onClick={() => onSave(stock, item.hasVariantStock ? variantStock : undefined)}
+          onClick={() => onSave(stock, item.hasVariantStock ? variantStock : undefined, reason)}
         >
           Guardar stock
         </Button>
@@ -106,14 +119,15 @@ export function StockManagementPage() {
   const { session } = useAuth();
   const canEdit = canEditStock(session?.role);
 
-  const onSave = (item: StockItem, nextStock: number, nextVariants?: VariantStock[]) => {
+  const onSave = (item: StockItem, nextStock: number, nextVariants?: VariantStock[], reason?: string) => {
     if (!session?.role) return;
 
     updateStock.mutate({
       item,
       nextStock,
       variantStock: nextVariants,
-      role: session.role
+      role: session.role,
+      reason
     });
   };
 
@@ -148,7 +162,7 @@ export function StockManagementPage() {
               item={item}
               editable={canEdit}
               isSaving={updateStock.isPending}
-              onSave={(nextStock, nextVariants) => onSave(item, nextStock, nextVariants)}
+              onSave={(nextStock, nextVariants, reason) => onSave(item, nextStock, nextVariants, reason)}
             />
           ))}
         </div>

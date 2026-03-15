@@ -3,6 +3,7 @@ import { useAdminProducts } from '@/modules/products/application/useAdminProduct
 import { useStockList } from '@/modules/stock/application/useStockManagement';
 import { useAdminOrders } from '@/modules/orders/application/useOrders';
 import { usePromotions } from '@/modules/promotions/application/usePromotions';
+import { useAdminCategories } from '@/modules/categories/application/useCategories';
 import { Loader } from '@/shared/ui/Loader/Loader';
 import { Alert } from '@/shared/ui/Alert/Alert';
 import styles from './AdminDashboardPage.module.scss';
@@ -31,6 +32,12 @@ const quickActions = [
     description: 'Configurá campañas por producto, categoría o volumen de compra.',
     to: '/admin/promociones',
     cta: 'Ir a promociones'
+  },
+  {
+    title: 'Gestionar categorías',
+    description: 'Administrá categorías para clasificar productos y promociones.',
+    to: '/admin/categorias',
+    cta: 'Ir a categorías'
   }
 ];
 
@@ -39,15 +46,17 @@ export function AdminDashboardPage() {
   const stockQuery = useStockList();
   const ordersQuery = useAdminOrders({});
   const promotionsQuery = usePromotions();
+  const categoriesQuery = useAdminCategories();
 
-  const hasError = productsQuery.isError || stockQuery.isError || ordersQuery.isError || promotionsQuery.isError;
-  const isLoading = productsQuery.isPending || stockQuery.isPending || ordersQuery.isPending || promotionsQuery.isPending;
+  const hasError = productsQuery.isError || stockQuery.isError || ordersQuery.isError || promotionsQuery.isError || categoriesQuery.isError;
+  const isLoading = productsQuery.isPending || stockQuery.isPending || ordersQuery.isPending || promotionsQuery.isPending || categoriesQuery.isPending;
 
   const totalProducts = productsQuery.data?.length ?? 0;
   const activeProducts = productsQuery.data?.filter((product) => product.active).length ?? 0;
   const lowStockItems = stockQuery.data?.filter((item) => item.alertLevel !== 'ok').length ?? 0;
   const totalOrders = ordersQuery.data?.length ?? 0;
   const activePromotions = promotionsQuery.data?.filter((promotion) => promotion.active).length ?? 0;
+  const totalCategories = categoriesQuery.data?.length ?? 0;
 
   return (
     <section className={styles.container}>
@@ -96,6 +105,12 @@ export function AdminDashboardPage() {
           <p className={styles.metricLabel}>Promociones activas</p>
           <strong>{activePromotions}</strong>
           <small>campañas vigentes para venta</small>
+        </article>
+
+        <article className={styles.metricCard}>
+          <p className={styles.metricLabel}>Categorías</p>
+          <strong>{totalCategories}</strong>
+          <small>categorías disponibles para catálogo</small>
         </article>
       </section>
 

@@ -72,7 +72,7 @@ export function Navbar({ onLogout }: NavbarProps) {
                   🛠️ Admin
                 </Link>
               )}
-              <Link to="/mis-pedidos" className={styles.accountButton} onClick={closeMenu}>
+              <Link to="/mi-cuenta" className={styles.accountButton} onClick={closeMenu}>
                 👤 Cuenta
               </Link>
               <button type="button" className={styles.logoutButton} onClick={handleLogout} disabled={isSessionLoading || logoutMutation.isPending}>
