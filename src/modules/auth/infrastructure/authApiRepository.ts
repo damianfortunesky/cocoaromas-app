@@ -19,22 +19,30 @@ type LoginApiResponse = {
     userId?: string;
     email?: string;
     role?: string;
+    role_name?: string;
   };
   id?: string;
   userId?: string;
   email?: string;
   role?: string;
+  role_name?: string;
 };
 
 const isRole = (value: string): value is Role => ['admin', 'owner', 'employee', 'client'].includes(value);
+
+const normalizeRole = (value: unknown): Role | null => {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim().toLowerCase();
+  return isRole(normalized) ? normalized : null;
+};
 
 const normalizeLoginResponse = (response: LoginApiResponse): LoginResponse => {
   const accessToken = response.accessToken ?? response.token;
   const userId = response.user?.id ?? response.user?.userId ?? response.id ?? response.userId;
   const email = response.user?.email ?? response.email;
-  const role = response.user?.role ?? response.role;
+  const role = normalizeRole(response.user?.role ?? response.user?.role_name ?? response.role ?? response.role_name);
 
-  if (!accessToken || !userId || !email || !role || !isRole(role)) {
+  if (!accessToken || !userId || !email || !role) {
     throw new Error('Respuesta de autenticación inválida.');
   }
 

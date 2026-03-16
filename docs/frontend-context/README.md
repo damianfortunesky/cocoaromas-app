@@ -1,36 +1,12 @@
-# Tasks del desarrollo frontend (backup de prompts y alcance)
+# Frontend Context — Documentación consolidada
 
-Este directorio documenta las tareas solicitadas para construir **cocoaromas-app** hasta el estado actual.
+Esta carpeta consolida el contexto funcional y técnico del frontend en pocos documentos operativos.
 
-## Objetivos de esta carpeta
-- Tener respaldo histórico de cada pedido en formato Markdown.
-- Mantener contexto consistente para el backend (contratos consumidos, reglas y restricciones de UI/UX).
-- Mejorar trazabilidad para reutilizar/mejorar prompts futuros.
+## Índice recomendado
+1. [Arquitectura y módulos](./01-arquitectura-y-modulos.md)
+2. [Contratos API y mapeos](./02-contratos-api-y-mapeos.md)
+3. [Reglas de negocio y flujos](./03-reglas-negocio-y-flujos.md)
+4. [Historial y migración de contexto](./04-historial-y-migracion-contexto.md)
 
-## Índice de tareas
-1. [Task 01 - Bootstrap frontend y arquitectura base](./task-01-bootstrap-frontend.md)
-2. [Task 02 - Autenticación JWT en frontend](./task-02-auth-jwt-frontend.md)
-3. [Task 03 - Catálogo público en storefront](./task-03-catalogo-publico-frontend.md)
-4. [Task 04 - Flujo de carrito y pedidos del cliente](./task-04-pedidos-cliente-frontend.md)
-5. [Task 05 - Panel admin de productos](./task-05-admin-productos-frontend.md)
-6. [Task 06 - Reglas de stock en interacción de compra](./task-06-reglas-stock-frontend.md)
-7. [Task 07 - Seguridad de rutas y perfiles](./task-07-seguridad-perfiles-frontend.md)
-8. [Task 08 - Gestión administrativa de stock](./task-08-admin-stock-frontend.md)
-9. [Task 09 - Gestión administrativa de pedidos](./task-09-admin-pedidos-frontend.md)
-10. [Task 10 - Gestión administrativa de promociones](./task-10-admin-promociones-frontend.md)
-11. [Task 11 - Registro público de usuarios](./task-11-registro-publico-frontend.md)
-12. [Task 12 - Refactorización según contexto](./task-12-refactorizacion-segun-contexto-frontend.md)
-13. [Task 13 - Alineación endpoint de login y base URL de API](./task-13-alineacion-endpoint-login-api-base-url.md)
-
-## Plantilla sugerida para próximos pedidos
-- **Título de task**
-- **Contexto funcional** (qué módulo o ruta afecta)
-- **Objetivo de UX/negocio**
-- **Contrato API consumido** (request/response/error)
-- **Estados de UI** (loading, empty, error, success)
-- **Reglas de negocio en cliente**
-- **Criterios de aceptación**
-- **No objetivos**
-- **Notas de trazabilidad**
-
-14. [Task 21 - Frontend flows mínimos viables](./task-21-frontend-flows-minimos-viables.md)
+## Nota
+Los antiguos archivos `task-*.md` fueron absorbidos en estos documentos para evitar duplicidad y mantener una única fuente clara de contexto.
