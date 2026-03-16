@@ -20,7 +20,7 @@ export function ProductListTable({ products, onEdit, onDelete, onToggleStatus, i
         product.name,
         `$${product.price.toLocaleString('es-AR')}`,
         product.stock,
-        product.category,
+        product.categoryName,
         <div key={`${product.id}-status`} className={styles.statusCell}>
           <span className={product.active ? styles.active : styles.inactive}>{product.active ? 'Activo' : 'Inactivo'}</span>
           <Button type="button" onClick={() => onToggleStatus(product)} disabled={isMutating}>

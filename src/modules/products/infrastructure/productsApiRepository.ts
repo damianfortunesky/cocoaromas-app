@@ -4,8 +4,7 @@ import type {
   ProductCreateInput,
   ProductEntity,
   ProductListFilters,
-  ProductUpdateInput,
-  ProductVariant
+  ProductUpdateInput
 } from '@/modules/products/domain/productAdmin.types';
 
 type ProductApiDto = {
@@ -18,6 +17,7 @@ type ProductApiDto = {
   productDescription?: string;
   product_description?: string;
   category?: string;
+  categoryLabel?: string;
   categoryId?: string | number;
   category_id?: string | number;
   categoryName?: string;
@@ -28,12 +28,6 @@ type ProductApiDto = {
   stock_quantity?: number | string;
   imageUrl?: string;
   image_url?: string;
-  images?: string[];
-  attributes?: Record<string, unknown>;
-  variants?: Array<{
-    name?: string;
-    options?: Array<string | { value?: string; label?: string }>;
-  }>;
   active?: boolean;
   isActive?: boolean;
   is_active?: boolean;
@@ -48,54 +42,37 @@ const toNumber = (value: unknown, fallback = 0): number => {
   return fallback;
 };
 
-const toStringRecord = (attributes?: Record<string, unknown>): Record<string, string> =>
-  Object.entries(attributes ?? {}).reduce<Record<string, string>>((acc, [key, value]) => {
-    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-      acc[key] = String(value);
-    }
-    return acc;
-  }, {});
-
-const toVariants = (variants?: ProductApiDto['variants']): ProductVariant[] | undefined => {
-  const mapped =
-    variants?.map((variant) => ({
-      name: variant.name ?? 'Variante',
-      options:
-        variant.options
-          ?.map((option) => (typeof option === 'string' ? option : option.value ?? option.label ?? ''))
-          .filter(Boolean) ?? []
-    })) ?? [];
-
-  return mapped.length > 0 ? mapped : undefined;
-};
-
 const toProductEntity = (dto: ProductApiDto): ProductEntity => {
-  const images = dto.images ?? [];
-  const imageUrl = dto.imageUrl ?? dto.image_url ?? images[0] ?? 'https://placehold.co/100x100?text=Producto';
+  const imageUrl = dto.imageUrl ?? dto.image_url ?? 'https://placehold.co/100x100?text=Producto';
+  const categoryId = String(dto.categoryId ?? dto.category_id ?? '');
+  const categoryName = dto.categoryName ?? dto.category_name ?? dto.categoryLabel ?? dto.category ?? '';
 
   return {
     id: String(dto.id ?? ''),
     name: dto.name ?? dto.productName ?? dto.product_name ?? dto.title ?? 'Producto sin nombre',
     description: dto.description ?? dto.productDescription ?? dto.product_description ?? '',
-    category: dto.categoryName ?? dto.category_name ?? dto.category ?? String(dto.categoryId ?? dto.category_id ?? ''),
+    categoryId,
+    categoryName,
     price: toNumber(dto.price),
     stock: toNumber(dto.stock ?? dto.stockQuantity ?? dto.stock_quantity),
     imageUrl,
-    images: images.length > 0 ? images : [imageUrl],
-    attributes: toStringRecord(dto.attributes),
-    variants: toVariants(dto.variants),
     active: dto.active ?? dto.isActive ?? dto.is_active ?? true
   };
 };
 
-const toProductPayload = (payload: ProductCreateInput | ProductUpdateInput) => ({
-  ...payload,
-  productName: payload.name,
-  productDescription: payload.description,
-  categoryId: payload.category,
-  stockQuantity: payload.stock,
-  isActive: payload.active
-});
+const toProductPayload = (payload: ProductCreateInput | ProductUpdateInput): ProductApiDto => {
+  const data: ProductApiDto = {};
+
+  if (payload.name !== undefined) data.name = payload.name;
+  if (payload.description !== undefined) data.description = payload.description;
+  if (payload.categoryId !== undefined) data.categoryId = payload.categoryId;
+  if (payload.price !== undefined) data.price = payload.price;
+  if (payload.stock !== undefined) data.stockQuantity = payload.stock;
+  if (payload.imageUrl !== undefined) data.imageUrl = payload.imageUrl;
+  if (payload.active !== undefined) data.isActive = payload.active;
+
+  return data;
+};
 
 export const productsApiRepository = {
   async list(filters: ProductListFilters = {}): Promise<ProductEntity[]> {

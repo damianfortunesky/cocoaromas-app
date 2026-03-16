@@ -7,19 +7,15 @@ export type ProductEntity = {
   id: string;
   name: string;
   description: string;
-  category: string;
+  categoryId: string;
+  categoryName: string;
   price: number;
   stock: number;
   imageUrl: string;
-  images: string[];
-  attributes: Record<string, string>;
-  variants?: ProductVariant[];
   active: boolean;
 };
 
-export type ProductCreateInput = Omit<ProductEntity, 'id' | 'category'> & {
-  category: string;
-};
+export type ProductCreateInput = Omit<ProductEntity, 'id' | 'categoryName'>;
 
 export type ProductUpdateInput = Partial<ProductCreateInput>;
 
