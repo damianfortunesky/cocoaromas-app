@@ -7,10 +7,14 @@ type CatalogVariantOption = {
   label?: string;
   value?: string;
   name?: string;
+  productName?: string;
+  product_name?: string;
 };
 
 type CatalogVariantDto = {
   name?: string;
+  productName?: string;
+  product_name?: string;
   label?: string;
   options?: Array<string | CatalogVariantOption>;
   values?: Array<string | CatalogVariantOption>;
@@ -20,14 +24,23 @@ type CatalogProductDto = {
   id?: string | number;
   slug?: string;
   name?: string;
+  productName?: string;
+  product_name?: string;
   title?: string;
   description?: string;
+  productDescription?: string;
+  product_description?: string;
   shortDescription?: string;
   longDescription?: string;
   category?: string;
+  categoryId?: string | number;
+  category_id?: string | number;
   categoryName?: string;
+  category_name?: string;
   price?: number | string;
   stock?: number | string;
+  stockQuantity?: number | string;
+  stock_quantity?: number | string;
   availableStock?: number | string;
   imageUrl?: string;
   image_url?: string;
@@ -36,6 +49,7 @@ type CatalogProductDto = {
   images?: string[];
   gallery?: string[];
   active?: boolean;
+  is_active?: boolean;
   isActive?: boolean;
   attributes?: Record<string, unknown>;
   specs?: Record<string, unknown>;
@@ -124,15 +138,15 @@ const toProduct = (product: CatalogProductDto): Product => {
 
   return {
     id: String(product.id ?? product.slug ?? ''),
-    name: product.name ?? product.title ?? 'Producto sin nombre',
-    description: product.description ?? product.shortDescription ?? product.longDescription ?? '',
-    category: product.category ?? product.categoryName ?? 'sin-categoria',
+    name: product.name ?? product.productName ?? product.product_name ?? product.title ?? 'Producto sin nombre',
+    description: product.description ?? product.productDescription ?? product.product_description ?? product.shortDescription ?? product.longDescription ?? '',
+    category: product.category ?? product.categoryName ?? product.category_name ?? String(product.categoryId ?? product.category_id ?? 'sin-categoria'),
     price: toNumber(product.price),
-    stock: toNumber(product.stock ?? product.availableStock),
+    stock: toNumber(product.stock ?? product.stockQuantity ?? product.stock_quantity ?? product.availableStock),
     imageUrl: mainImage,
     images,
     attributes: toStringMap(product.attributes, product.specs, product.details, product.metadata),
-    active: product.active ?? product.isActive ?? true,
+    active: product.active ?? product.isActive ?? product.is_active ?? true,
     variants: toVariants(product.variants)
   };
 };

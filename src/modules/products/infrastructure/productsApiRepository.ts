@@ -11,13 +11,21 @@ import type {
 type ProductApiDto = {
   id?: string | number;
   name?: string;
+  productName?: string;
+  product_name?: string;
   title?: string;
   description?: string;
+  productDescription?: string;
+  product_description?: string;
   category?: string;
   categoryId?: string | number;
+  category_id?: string | number;
   categoryName?: string;
+  category_name?: string;
   price?: number | string;
   stock?: number | string;
+  stockQuantity?: number | string;
+  stock_quantity?: number | string;
   imageUrl?: string;
   image_url?: string;
   images?: string[];
@@ -28,6 +36,7 @@ type ProductApiDto = {
   }>;
   active?: boolean;
   isActive?: boolean;
+  is_active?: boolean;
 };
 
 const toNumber = (value: unknown, fallback = 0): number => {
@@ -66,18 +75,27 @@ const toProductEntity = (dto: ProductApiDto): ProductEntity => {
 
   return {
     id: String(dto.id ?? ''),
-    name: dto.name ?? dto.title ?? 'Producto sin nombre',
-    description: dto.description ?? '',
-    category: dto.categoryName ?? dto.category ?? String(dto.categoryId ?? ''),
+    name: dto.name ?? dto.productName ?? dto.product_name ?? dto.title ?? 'Producto sin nombre',
+    description: dto.description ?? dto.productDescription ?? dto.product_description ?? '',
+    category: dto.categoryName ?? dto.category_name ?? dto.category ?? String(dto.categoryId ?? dto.category_id ?? ''),
     price: toNumber(dto.price),
-    stock: toNumber(dto.stock),
+    stock: toNumber(dto.stock ?? dto.stockQuantity ?? dto.stock_quantity),
     imageUrl,
     images: images.length > 0 ? images : [imageUrl],
     attributes: toStringRecord(dto.attributes),
     variants: toVariants(dto.variants),
-    active: dto.active ?? dto.isActive ?? true
+    active: dto.active ?? dto.isActive ?? dto.is_active ?? true
   };
 };
+
+const toProductPayload = (payload: ProductCreateInput | ProductUpdateInput) => ({
+  ...payload,
+  productName: payload.name,
+  productDescription: payload.description,
+  categoryId: payload.category,
+  stockQuantity: payload.stock,
+  isActive: payload.active
+});
 
 export const productsApiRepository = {
   async list(filters: ProductListFilters = {}): Promise<ProductEntity[]> {
@@ -91,15 +109,15 @@ export const productsApiRepository = {
     return items.map(toProductEntity);
   },
   async create(payload: ProductCreateInput): Promise<ProductEntity> {
-    const { data } = await httpClient.post<ProductApiDto>(API_ENDPOINTS.products, payload);
+    const { data } = await httpClient.post<ProductApiDto>(API_ENDPOINTS.products, toProductPayload(payload));
     return toProductEntity(data);
   },
   async update(id: string, payload: ProductUpdateInput): Promise<ProductEntity> {
-    const { data } = await httpClient.put<ProductApiDto>(API_ENDPOINTS.productById(id), payload);
+    const { data } = await httpClient.put<ProductApiDto>(API_ENDPOINTS.productById(id), toProductPayload(payload));
     return toProductEntity(data);
   },
   async updateStatus(id: string, active: boolean): Promise<ProductEntity> {
-    const { data } = await httpClient.patch<ProductApiDto>(API_ENDPOINTS.productStatusById(id), { active });
+    const { data } = await httpClient.patch<ProductApiDto>(API_ENDPOINTS.productStatusById(id), { active, isActive: active });
     return toProductEntity(data);
   },
   async remove(id: string): Promise<void> {
